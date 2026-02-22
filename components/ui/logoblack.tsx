@@ -1,0 +1,10 @@
+import Image from "next/image";
+
+export default function BlackLogo({mode = "black"}) {
+  return (
+    <div className="flex gap-2 items-center md:gap-4">
+      <Image className="md:w-6 md:h-12" width={16} height={32} alt="Logo" src={mode === "black" ? "/blacklogo.svg" : "/whitelogo.svg"} />
+      <p className={`text-xl font-semibold ${mode === "black" ? "text-[#0E0636]" : "text-white"}  md:text-[32px]`}>GiftedForge</p>
+    </div>
+  );
+}

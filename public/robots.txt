@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://giftedforge.com
+
+# Sitemaps
+Sitemap: https://giftedforge.com/sitemap.xml
