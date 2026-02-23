@@ -2,27 +2,50 @@
 
 import { GoArrowLeft, GoArrowRight } from "react-icons/go";
 import AboutTrustCard from "../ui/AboutTrustCard";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 
 const AboutTrust = () => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const [activeIndex, setActiveIndex] = useState(NaN);
+    const totalSlides = 4;
 
-    const scroll = (direction: "left" | "right") => {
+    useEffect(() => {
+
+        let timeout = setTimeout(() => {
+            setActiveIndex(0)
+        }, 100)
+
+        const interval = setInterval(() => {
+            setActiveIndex((prev) => (prev + 1) % totalSlides);
+        }, 10000); // 10 seconds
+
+        return () => {
+            clearTimeout(timeout)
+            clearInterval(interval)
+        };
+    }, []);
+
+    useEffect(() => {
         const el = scrollContainerRef.current;
         if (!el) return;
 
-        const firstSlide = el.children[0] as HTMLElement;
-        if (!firstSlide) return;
+        const slide = el.children[activeIndex] as HTMLElement;
+        if (!slide) return;
 
-        const styles = window.getComputedStyle(el);
-        const gap = parseInt(styles.columnGap || styles.gap || "0");
-
-        const scrollAmount = firstSlide.offsetWidth + gap;
-
-        el.scrollBy({
-            left: direction === "left" ? -scrollAmount : scrollAmount,
+        const containerPadding = parseInt(window.getComputedStyle(el).paddingLeft || "0");
+        
+        el.scrollTo({
+            left: slide.offsetLeft - containerPadding,
             behavior: "smooth",
         });
+    }, [activeIndex]);
+
+    const scroll = (direction: "left" | "right") => {
+        if (direction === "left") {
+            setActiveIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+        } else {
+            setActiveIndex((prev) => (prev + 1) % totalSlides);
+        }
     };
 
     return (
@@ -30,7 +53,7 @@ const AboutTrust = () => {
             <h2 className="px-6 md:px-12 text-[#0E0636] text-2xl md:text-5xl leading-11 md:leading-15 font-semibold">
                 Why{" "}
                 <img
-                    className="w-9.5 h-9.5 md:h-12 md:w-12 inline"
+                    className="w-9.5 h-9.5 md:h-14.5 md:w-14.5 inline"
                     src="/arrowright.svg"
                     alt=""
                 />{" "}
@@ -47,7 +70,7 @@ const AboutTrust = () => {
                         onClick={() => scroll("left")}
                         className="w-11 h-11 rounded-full border border-[#0E0636] 
                         flex items-center justify-center 
-                        hover:bg-[#0E0636] hover:text-white 
+                        hover:bg-[#0E0636] hover:text-white  cursor-pointer
                         transition-colors"
                         aria-label="Previous projects"
                     >
@@ -56,9 +79,9 @@ const AboutTrust = () => {
 
                     <button
                         onClick={() => scroll("right")}
-                        className="w-11 h-11 rounded-full border border-[#0E0636] 
-                        flex items-center justify-center 
-                        hover:bg-[#0E0636] hover:text-white 
+                        className="w-12 h-12 rounded-full border border-[#0E0636] 
+                        flex items-center justify-center cursor-pointer
+                        bg-[#0E0636] text-white 
                         transition-colors"
                         aria-label="Next projects"
                     >
@@ -79,10 +102,11 @@ const AboutTrust = () => {
             >
                 {/* Slide 1 */}
                 <div className="shrink-0 snap-end mt-4 flex flex-col gap-4 
-                    md:flex-row md:gap-6 
+                    md:flex-row md:gap-6
                     md:min-w-[clamp(800px,85vw,1100px)]"
                 >
                     <AboutTrustCard
+                        isActive={activeIndex === 0}
                         title="Our Mission"
                         text="We provide a safe, reliable space for freelancers and clients to collaborate confidently and complete projects smoothly."
                     />
@@ -92,7 +116,7 @@ const AboutTrust = () => {
                         sm:w-[420px] sm:h-[280px]
                         md:w-[clamp(500px,60vw,722px)]
                         md:h-[clamp(340px,40vw,483px)]
-                        rounded-4xl"
+                        rounded-4xl md:rounded-[48px]"
                         alt=""
                     />
                 </div>
@@ -103,7 +127,7 @@ const AboutTrust = () => {
                     md:min-w-[clamp(800px,85vw,1100px)]"
                 >
                     <AboutTrustCard
-                        progress="w-[120px] md:w-[242px]"
+                        isActive={activeIndex === 1}
                         title="Our Values"
                         text="Transparency, innovation, and care guide everything we do, creating an open, supportive, and valued experience for all users."
                     />
@@ -113,7 +137,7 @@ const AboutTrust = () => {
                         sm:w-[420px] sm:h-[280px]
                         md:w-[clamp(500px,60vw,722px)]
                         md:h-[clamp(340px,40vw,483px)]
-                        rounded-4xl"
+                        rounded-4xl md:rounded-[48px]"
                         alt=""
                     />
                 </div>
@@ -124,7 +148,7 @@ const AboutTrust = () => {
                     md:min-w-[clamp(800px,85vw,1100px)]"
                 >
                     <AboutTrustCard
-                        progress="w-[178px] md:w-[342px]"
+                        isActive={activeIndex === 2}
                         title="Our Technology"
                         text="GiftedForge uses AI, secure blockchain escrow, and modern UI/UX to deliver a smarter, safer, and smoother experience."
                     />
@@ -134,7 +158,7 @@ const AboutTrust = () => {
                         sm:w-[420px] sm:h-[280px]
                         md:w-[clamp(500px,60vw,722px)]
                         md:h-[clamp(340px,40vw,483px)]
-                        rounded-4xl"
+                        rounded-4xl md:rounded-[48px]"
                         alt=""
                     />
                 </div>
@@ -145,9 +169,9 @@ const AboutTrust = () => {
                     md:min-w-[clamp(800px,85vw,1100px)]"
                 >
                     <AboutTrustCard
+                        isActive={activeIndex === 3}
                         title="Why GiftedForge"
                         text="We don’t just connect people—we build trust, helping freelancers grow and clients achieve results with confidence."
-                        progress="w-full"
                     />
                     <img
                         src="/groupy.png"
@@ -155,7 +179,7 @@ const AboutTrust = () => {
                         sm:w-[420px] sm:h-[280px]
                         md:w-[clamp(500px,60vw,722px)]
                         md:h-[clamp(340px,40vw,483px)]
-                        rounded-4xl"
+                        rounded-4xl md:rounded-[48px]"
                         alt=""
                     />
                 </div>
@@ -167,7 +191,7 @@ const AboutTrust = () => {
                     onClick={() => scroll("left")}
                     className="w-8.5 h-8.5 rounded-full border border-[#0E0636] 
                     flex items-center justify-center 
-                    hover:bg-[#0E0636] hover:text-white 
+                    focus:bg-[#0E0636] focus:text-white 
                     transition-colors"
                     aria-label="Previous projects"
                 >
@@ -177,12 +201,12 @@ const AboutTrust = () => {
                 <button
                     onClick={() => scroll("right")}
                     className="w-9.5 h-9.5 rounded-full border border-[#0E0636] 
-                    flex items-center justify-center 
-                    hover:bg-[#0E0636] hover:text-white 
+                    flex items-center justify-center
+                    bg-[#0E0636]
                     transition-colors"
                     aria-label="Next projects"
                 >
-                    <GoArrowRight className="w-6 h-6" />
+                    <GoArrowRight className="w-6 h-6 text-white" />
                 </button>
             </div>
         </section>
