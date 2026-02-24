@@ -1,4 +1,12 @@
-const AboutTrustCard = ({ isActive = false, title = "", text = "" }) => {
+import { ReactNode } from "react";
+
+interface AboutTrustCardType {
+    isActive: boolean;
+    title: string;
+    text: string | ReactNode
+}
+
+const AboutTrustCard = ({ isActive = false, title = "", text = "" }: AboutTrustCardType) => {
 
 
 

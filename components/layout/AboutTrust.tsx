@@ -7,6 +7,7 @@ import { useRef, useState, useEffect } from "react";
 const AboutTrust = () => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState(NaN);
+    const [activeMobileButton, setActiveMobileButton] = useState("")
     const totalSlides = 4;
 
     useEffect(() => {
@@ -41,6 +42,7 @@ const AboutTrust = () => {
     }, [activeIndex]);
 
     const scroll = (direction: "left" | "right") => {
+        setActiveMobileButton(direction)
         if (direction === "left") {
             setActiveIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
         } else {
@@ -65,7 +67,7 @@ const AboutTrust = () => {
                     Where Talent, Technology, and Trust Meet.
                 </p>
 
-                <div className="hidden md:flex gap-6 mb-25">
+                <div className="hidden md:flex items-center gap-6 mb-25">
                     <button
                         onClick={() => scroll("left")}
                         className="w-11 h-11 rounded-full border border-[#0E0636] 
@@ -81,7 +83,7 @@ const AboutTrust = () => {
                         onClick={() => scroll("right")}
                         className="w-12 h-12 rounded-full border border-[#0E0636] 
                         flex items-center justify-center cursor-pointer
-                        bg-[#0E0636] text-white 
+                        hover:bg-[#0E0636] hover:text-white 
                         transition-colors"
                         aria-label="Next projects"
                     >
@@ -129,7 +131,7 @@ const AboutTrust = () => {
                     <AboutTrustCard
                         isActive={activeIndex === 1}
                         title="Our Values"
-                        text="Transparency, innovation, and care guide everything we do, creating an open, supportive, and valued experience for all users."
+                        text={<>Transparency, innovation, and care <br className="hidden md:inline" /> guide everything we do, creating an open, supportive, and valued <br className="inline md:hidden" /> experience for all users.</>}
                     />
                     <img
                         src="/innovations.png"
@@ -150,7 +152,7 @@ const AboutTrust = () => {
                     <AboutTrustCard
                         isActive={activeIndex === 2}
                         title="Our Technology"
-                        text="GiftedForge uses AI, secure blockchain escrow, and modern UI/UX to deliver a smarter, safer, and smoother experience."
+                        text={<>GiftedForge uses AI, secure blockchain escrow, and modern UI/UX to deliver <br /> a smarter, safer, and smoother experience.</>}
                     />
                     <img
                         src="/technology.png"
@@ -171,7 +173,7 @@ const AboutTrust = () => {
                     <AboutTrustCard
                         isActive={activeIndex === 3}
                         title="Why GiftedForge"
-                        text="We don’t just connect people—we build trust, helping freelancers grow and clients achieve results with confidence."
+                        text={<>We don’t just connect people—we <br /> build trust, helping freelancers grow <br /> and clients achieve results with confidence.</>}
                     />
                     <img
                         src="/groupy.png"
@@ -186,13 +188,15 @@ const AboutTrust = () => {
             </div>
 
             {/* Mobile Arrows */}
-            <div className="flex ml-6 mt-12 md:hidden gap-4 mb-17">
+            <div className="flex items-center ml-6 mt-12 md:hidden gap-4 mb-17">
                 <button
                     onClick={() => scroll("left")}
-                    className="w-8.5 h-8.5 rounded-full border border-[#0E0636] 
-                    flex items-center justify-center 
-                    focus:bg-[#0E0636] focus:text-white 
-                    transition-colors"
+                    className={`w-8.5 h-8.5 rounded-full border border-[#0E0636] 
+                    flex items-center justify-center
+                    ${activeMobileButton === "left" && "text-white bg-[#0E0636]"}
+                    focus:bg-[#0E0636] focus:text-white
+                    active:bg-[#0E0636] active:text-white 
+                    transition-colors`}
                     aria-label="Previous projects"
                 >
                     <GoArrowLeft className="w-6 h-6" />
@@ -200,13 +204,15 @@ const AboutTrust = () => {
 
                 <button
                     onClick={() => scroll("right")}
-                    className="w-9.5 h-9.5 rounded-full border border-[#0E0636] 
+                    className={`w-9.5 h-9.5 rounded-full border border-[#0E0636] 
                     flex items-center justify-center
-                    bg-[#0E0636]
-                    transition-colors"
+                    focus:bg-[#0E0636] focus:text-white
+                    active:bg-[#0E0636] active:text-white 
+                     ${activeMobileButton === "right" && "text-white bg-[#0E0636]"}
+                    transition-colors`}
                     aria-label="Next projects"
                 >
-                    <GoArrowRight className="w-6 h-6 text-white" />
+                    <GoArrowRight className="w-6 h-6" />
                 </button>
             </div>
         </section>
