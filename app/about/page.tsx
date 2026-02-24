@@ -1,3 +1,4 @@
+import AboutFaq from "@/components/layout/AboutFAQ"
 import AboutTeam from "@/components/layout/AboutTeam"
 import AboutTrust from "@/components/layout/AboutTrust"
 import HeroOthers from "@/components/layout/HeroOthers"
@@ -8,6 +9,7 @@ const About = () => {
             <HeroOthers />
             <AboutTrust />
             <AboutTeam />
+            <AboutFaq />
         </div>
     )
 }

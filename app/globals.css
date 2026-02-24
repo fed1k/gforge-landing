@@ -16,8 +16,21 @@
     }
 }
 
+@keyframes scroll-right {
+    0% {
+        transform: translateX(-50%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
 .animate-scroll {
-    animation: scroll 20s linear infinite;
+    animation: scroll 35s linear infinite;
+}
+
+.animate-scroll-right {
+    animation: scroll-right 35s linear infinite;
 }
 
 .custom-shadow {

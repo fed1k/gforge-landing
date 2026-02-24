@@ -26,7 +26,7 @@ const Footer = () => {
 
                 <BlackLogo mode="white" />
                 <p className="text-[#DAD8FF] text-sm pt-8 pb-6 ">The future of freelancing is here. We bring together top talent and cutting-edge technology to build extraordinary products fast, smart, and seamless.</p>
-                <a className="text-xs text-white border border-white rounded-full px-3 inline-flex items-center gap-1 py-[5px]" href="">Read More About Us <img className="w-3.5 h-3.5" src="/arrow-right.svg" alt="" /> </a>
+                <a className="text-xs text-white border border-white hover:bg-[#6B6AFD] rounded-full px-3 inline-flex items-center gap-1 py-[5px]" href="">Read More About Us <img className="w-3.5 h-3.5" src="/arrow-right.svg" alt="" /> </a>
             </div>
             <div className="hidden md:block"></div>
             <div className="flex flex-col md:flex-row gap-6 text-white pt-12 md:pt-0">
