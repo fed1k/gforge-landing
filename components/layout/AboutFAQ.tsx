@@ -1,3 +1,5 @@
+"use client"
+
 import FaqCard from "../ui/FaqCard";
 
 const questions = [
@@ -99,14 +101,24 @@ const AboutFaq = () => {
                     </div>
                 </div>
 
-                <button className="mt-8 lg:mt-0 text-[#6B6AFD] bg-white rounded-full w-[159px] h-[46px] font-semibold">Get in Touch</button>
+                <button 
+                    onClick={(e) => e.currentTarget.focus()}
+                    className="mt-8 lg:mt-0 text-[#6B6AFD] bg-white focus:bg-[#0E0636] focus:text-white focus:outline-none hover:bg-[#0E0636] hover:text-white active:bg-[#0E0636] active:text-white transition-all duration-300 cursor-pointer rounded-full w-[159px] h-[46px] font-semibold"
+                >
+                    Get in Touch
+                </button>
             </div>
 
-
+                    {/*  */}
             <div className="bg-[#6B6AFD1A] rounded-3xl mx-3 mb-12 lg:mb-25 lg:mx-12 px-6 py-8 lg:py-12 flex flex-col items-center">
                 <h3 className="text-2xl text-[#0E0636] font-semibold lg:font-bold lg:text-[32px]">Ready to get started?</h3>
                 <p className="leading-7 text-[#0E0636] pt-6 lg:text-xl lg:leading-8 pb-8 w-[321px] lg:w-[856px] text-center">Join the platform of the future today and unlock smarter opportunities, <br className="lg:hidden" /> faster growth, <br className="hidden lg:inline" /> and a seamless experience designed to help you succeed from day one.</p>
-                <button className="text-sm font-semibold lg:text-base text-white rounded-full h-[46px] w-[159px] lg:w-[173px] lg:h-[49px] bg-[#6B6AFD]">Sign Up Now</button>
+                <button 
+                    onClick={(e) => e.currentTarget.focus()}
+                    className="text-sm font-semibold lg:text-base text-white rounded-full h-[46px] w-[159px] lg:w-[173px] lg:h-[49px] bg-[#6B6AFD] hover:shadow-[0px_4px_24px_0px_#00000029] focus:shadow-[0px_4px_24px_0px_#00000029] focus:outline-none active:shadow-[0px_4px_24px_0px_#00000029] transition-all duration-300 cursor-pointer"
+                >
+                    Sign Up Now
+                </button>
             </div>
         </div>
     )

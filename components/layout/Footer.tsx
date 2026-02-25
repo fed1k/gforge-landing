@@ -1,6 +1,7 @@
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import BlackLogo from "../ui/logoblack";
 import SocialContacts from "../ui/SocialContacts";
+import Link from "next/link";
 
 const Footer = () => {
     return (
@@ -15,7 +16,7 @@ const Footer = () => {
             <img className="absolute w-[146px] h-[178px] md:top-[5%] md:left-[35%] top-[50%] left-[40%] animate-drift" src="/logoparticle.svg" alt="" />
             <img className="absolute w-[146px] h-[178px] md:top-[75%] md:left-[45%] top-[50%] -right-[20%] animate-pulse-glow animation-delay-400" src="/logoparticle.svg" alt="" />
 
-            <img className="absolute w-[146px] h-[178px] md:top-[5%] md:left-[55%] top-[65%] left-[10%] animate-sway animation-delay-800" src="/logoparticle.svg" alt="" />
+            <img className="absolute w-[146px] h-[178px] z-10 md:top-[5%] md:left-[55%] top-[65%] left-[10%] animate-sway animation-delay-800" src="/logoparticle.svg" alt="" />
             <img className="absolute w-[146px] h-[178px] md:top-[35%] md:left-[65%] top-[78%] -left-[10%] animate-pulse-glow animation-delay-200" src="/logoparticle.svg" alt="" />
             <img className="absolute w-[146px] h-[178px] md:top-[75%] md:left-[70%] top-[78%] left-[30%] animate-drift animation-delay-1000" src="/logoparticle.svg" alt="" />
 
@@ -26,11 +27,11 @@ const Footer = () => {
 
                 <BlackLogo mode="white" />
                 <p className="text-[#DAD8FF] text-sm pt-8 pb-6 ">The future of freelancing is here. We bring together top talent and cutting-edge technology to build extraordinary products fast, smart, and seamless.</p>
-                <a className="text-xs text-white border border-white hover:bg-[#6B6AFD] rounded-full px-3 inline-flex items-center gap-1 py-[5px]" href="">Read More About Us <img className="w-3.5 h-3.5" src="/arrow-right.svg" alt="" /> </a>
+                <Link href="/about" className="text-xs text-white border border-white hover:bg-[#6B6AFD] rounded-full px-3 inline-flex items-center gap-1 py-[5px]">Read More About Us <img className="w-3.5 h-3.5" src="/arrow-right.svg" alt="" /> </Link>
             </div>
             <div className="hidden md:block"></div>
             <div className="flex flex-col md:flex-row gap-6 text-white pt-12 md:pt-0">
-                <a href="">About</a>
+                <Link className="z-20" href="/about">About</Link>
                 <a href="">Projects</a>
                 <a href="">Success Stories</a>
                 <a href="">For Clients</a>
