@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import SuccessCard from "../ui/SuccessCard";
+import VideoModal from "../ui/VideoModal";
 
 const useIsLg = () => {
     const [isLg, setIsLg] = useState(false);
@@ -39,8 +40,15 @@ const cardDataMobile = [
 
 const Stories = () => {
     const [activeCard, setActiveCard] = useState(1);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [activeVideo, setActiveVideo] = useState("");
     const isLg = useIsLg();
     const cardData = isLg ? cardDataLg : cardDataMobile;
+
+    const handleWatchClick = (videoUrl: string) => {
+        setActiveVideo(videoUrl);
+        setIsModalOpen(true);
+    };
 
     return (
         <section className="px-6 py-17 md:px-12 md:py-37">
@@ -57,29 +65,35 @@ const Stories = () => {
                     className={`w-86.25 lg:max-w-[635px] h-[402px] min-h-80 lg:h-140 shrink-0 transition-all duration-300 ${activeCard === 1 ? 'lg:flex-1 lg:shrink' : 'lg:w-50'}`}
                     onMouseEnter={() => setActiveCard(1)}
                 >
-                    <SuccessCard index={1} img={cardData[0].img} link="" name={cardData[0].name} date={cardData[0].date} category={cardData[0].category} title={cardData[0].title} isActive={activeCard === 1} onWatchClick={() => setActiveCard(1)} />
+                    <SuccessCard index={1} img={cardData[0].img} link="" name={cardData[0].name} date={cardData[0].date} category={cardData[0].category} title={cardData[0].title} isActive={activeCard === 1} onWatchClick={() => handleWatchClick("https://www.w3schools.com/html/mov_bbb.mp4")} />
                 </div>
                 <div
                     className={`w-86.25 lg:max-w-[635px] h-[402px] lg:h-140 shrink-0 transition-all duration-300 ${activeCard === 2 ? 'lg:flex-1 lg:shrink' : 'lg:w-50'}`}
                     onMouseEnter={() => setActiveCard(2)}
                 >
-                    <SuccessCard index={2} img={cardData[1].img} link="" name={cardData[1].name} date={cardData[1].date} category={cardData[1].category} title={cardData[1].title} isActive={activeCard === 2} onWatchClick={() => setActiveCard(2)} />
+                    <SuccessCard index={2} img={cardData[1].img} link="" name={cardData[1].name} date={cardData[1].date} category={cardData[1].category} title={cardData[1].title} isActive={activeCard === 2} onWatchClick={() => handleWatchClick("https://www.w3schools.com/html/mov_bbb.mp4")} />
                 </div>
                 <div
                     className={`w-86.25 lg:max-w-[635px] h-[402px] lg:h-140 shrink-0 transition-all duration-300 ${activeCard === 3 ? 'lg:flex-1 lg:shrink' : 'lg:w-50'}`}
                     onMouseEnter={() => setActiveCard(3)}
                 >
-                    <SuccessCard index={3} img={cardData[2].img} link="" name={cardData[2].name} date={cardData[2].date} category={cardData[2].category} title={cardData[2].title} isActive={activeCard === 3} onWatchClick={() => setActiveCard(3)} />
+                    <SuccessCard index={3} img={cardData[2].img} link="" name={cardData[2].name} date={cardData[2].date} category={cardData[2].category} title={cardData[2].title} isActive={activeCard === 3} onWatchClick={() => handleWatchClick("https://www.w3schools.com/html/mov_bbb.mp4")} />
                 </div>
                 <div
                     className={`w-86.25 lg:max-w-[635px] h-[402px] lg:h-140 shrink-0 transition-all duration-300 ${activeCard === 4 ? 'lg:flex-1 lg:shrink' : 'lg:w-50'}`}
                     onMouseEnter={() => setActiveCard(4)}
                 >
-                    <SuccessCard index={4} img={cardData[3].img} link="" name={cardData[3].name} date={cardData[3].date} category={cardData[3].category} title={cardData[3].title} isActive={activeCard === 4} onWatchClick={() => setActiveCard(4)} />
+                    <SuccessCard index={4} img={cardData[3].img} link="" name={cardData[3].name} date={cardData[3].date} category={cardData[3].category} title={cardData[3].title} isActive={activeCard === 4} onWatchClick={() => handleWatchClick("https://www.w3schools.com/html/mov_bbb.mp4")} />
                 </div>
             </div>
 
             <button className="mt-12 md:hidden  font-medium text-[#0E0636] cursor-pointer py-2 px-7 border border-[#0E0636] rounded-full">View All</button>
+
+            <VideoModal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+                videoUrl={activeVideo}
+            />
         </section>
     )
 }
