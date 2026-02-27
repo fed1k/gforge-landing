@@ -10,9 +10,9 @@ interface VideoModalProps {
     description?: string;
 }
 
-const VideoModal = ({ 
-    isOpen, 
-    onClose, 
+const VideoModal = ({
+    isOpen,
+    onClose,
     videoUrl = "https://www.w3schools.com/html/mov_bbb.mp4",
     title = "Success Story",
     description = "Discover how GiftedForge empowers freelancers to achieve their goals and scale their careers."
@@ -130,40 +130,43 @@ const VideoModal = ({
         }, 3000);
     };
 
+    const toggleFullscreen = (e) => {
+        e.stopPropagation();
+        if (!videoRef.current) return;
+        if (!document.fullscreenElement) {
+            videoRef.current.requestFullscreen?.();
+        } else {
+            document.exitFullscreen?.();
+        }
+    };
+
     if (!isOpen || !mounted) return null;
 
     return (
-        <div 
+        <div
             className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 overflow-y-auto"
             style={{ backgroundColor: "#000000CC" }}
             onClick={onClose}
         >
-            <div 
-                className="relative w-full max-w-5xl bg-white rounded-[40px] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-500"
+            <div
+                className="relative w-full max-w-[1004px] bg-white rounded-[40px] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-500"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="p-6 md:p-12">
                     {/* Header */}
                     <div className="flex justify-between items-start mb-8">
-                        <div className="max-w-[80%]">
-                            <h3 className="text-2xl md:text-3xl font-bold text-[#0E0636] leading-tight mb-4">
-                                {title}
+                        <div className="">
+                            <h3 className="text-2xl md:text-3xl text-center font-semibold text-[#0E0636] leading-tight">
+                                How GiftedForge
+                                Helped a Freelance UI/UX Designer Scale
+                                Their Career
                             </h3>
                         </div>
-                        <button 
-                            onClick={onClose}
-                            className="w-12 h-12 flex items-center justify-center bg-[#F4F4F4] hover:bg-[#6B6AFD] hover:text-white rounded-full text-[#0E0636] transition-all duration-300"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                            </svg>
-                        </button>
                     </div>
 
                     {/* Video Container */}
-                    <div 
-                        className="relative w-full aspect-video rounded-3xl overflow-hidden bg-black group cursor-pointer"
+                    <div
+                        className="relative w-full h-[390px] aspect-video rounded-3xl overflow-hidden bg-black group cursor-pointer"
                         onMouseMove={handleMouseMove}
                         onMouseLeave={() => isPlaying && setShowControls(false)}
                         onClick={togglePlay}
@@ -171,7 +174,7 @@ const VideoModal = ({
                         <video
                             ref={videoRef}
                             className="w-full h-full object-contain"
-                            src={videoUrl}
+                            src={"/story.mp4"}
                             onTimeUpdate={handleTimeUpdate}
                             onLoadedMetadata={handleLoadedMetadata}
                             onPlay={() => setIsPlaying(true)}
@@ -180,12 +183,16 @@ const VideoModal = ({
                         />
 
                         {/* Controls Overlay */}
-                        <div 
+                        <div
                             className={`absolute inset-0 flex flex-col justify-end transition-opacity duration-500 bg-gradient-to-t from-black/60 via-transparent to-transparent ${showControls ? 'opacity-100' : 'opacity-0'}`}
                         >
-                            
+
                             <div className="p-4 md:p-8" onClick={(e) => e.stopPropagation()}>
-                                <div className="flex items-center justify-end mb-4">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div>
+                                        <p className="text-white">Carla</p>
+                                        <p className="text-white">Jan 26, 2026</p>
+                                    </div>
                                     {/* Time Display */}
                                     <div className="text-white text-sm font-medium tabular-nums">
                                         {formatTime(currentTime)} / {formatTime(duration)}
@@ -193,18 +200,34 @@ const VideoModal = ({
                                 </div>
 
                                 {/* Progress Bar */}
-                                <div className="relative w-full h-1.5 bg-white/20 rounded-full cursor-pointer group/progress">
+                                <div
+                                    className="relative w-full h-0.5 bg-white/20 rounded-full cursor-pointer group/progress"
+                                >
+                                    {/* Invisible range input for clicking/dragging anywhere */}
                                     <input
                                         type="range"
                                         min="0"
                                         max="100"
                                         value={progress}
                                         onChange={handleProgressChange}
-                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
                                     />
-                                    <div 
-                                        className="absolute top-0 left-0 h-full bg-white rounded-full transition-all duration-100"
+
+                                    {/* Progress fill */}
+                                    <div
+                                        className="absolute top-0 left-0 h-full bg-white rounded-full transition-all duration-150 ease-out"
                                         style={{ width: `${progress}%` }}
+                                    />
+
+                                    {/* Circle dot that follows the progress end */}
+                                    <div
+                                        className={`absolute top-1/2 -translate-y-1/2 w-3 h-3  bg-white rounded-full border-4 border-white/90 shadow-[0_0_8px_rgba(255,255,255,0.7)]
+      transition-all duration-150 ease-out group-hover/progress:scale-125 group-hover/progress:shadow-lg
+      z-10
+    `}
+                                        style={{
+                                            left: `calc(${progress}% - 8px)`, // half of 16px (w-4 = 1rem = 16px)
+                                        }}
                                     />
                                 </div>
                             </div>
@@ -212,49 +235,61 @@ const VideoModal = ({
 
                         {/* Center Controls */}
                         {!isPlaying && (
-                            <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-all z-20 gap-10">
-                                {/* Skip Backward */}
-                                <button 
-                                    onClick={skipBackward}
-                                    className="text-white flex justify-center items-center cursor-pointer w-16 h-16 video-pause-design rounded-full hover:text-[#6B6AFD] transition-transform transform hover:scale-110"
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-all z-20 gap-2.5">
+
+                                {/* full screnn */}
+                                <button
+                                    onClick={toggleFullscreen}
+                                    className="text-white flex top-6 right-6 absolute justify-center items-center cursor-pointer w-[35px] h-[38px] lg:w-12 lg:h-12 video-pause-design rounded-full hover:text-[#6B6AFD] transition-transform transform hover:scale-110"
                                     title="Back 10s"
                                 >
-                                    <img className="w-8 h-8" src="/back.svg" alt="" />
+                                    <img className="w-6 h-6 " src="/fullscreen.svg" alt="" />
+                                </button>
+
+
+                                {/* Skip Backward */}
+                                <button
+                                    onClick={skipBackward}
+                                    className="text-white flex justify-center items-center cursor-pointer w-[39px] h-[39px] lg:w-16 lg:h-16 video-pause-design rounded-full hover:text-[#6B6AFD] transition-transform transform hover:scale-110"
+                                    title="Back 10s"
+                                >
+                                    <img className="w-4 h-4 lg:w-8 lg:h-8" src="/back.svg" alt="" />
                                 </button>
 
                                 {/* Play/Pause */}
-                                <button 
+                                <button
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         togglePlay();
                                     }}
-                                    className="w-24 h-24 cursor-pointer video-pause-design flex items-center justify-center rounded-full text-white shadow-2xl transform transition-transform hover:scale-110"
+                                    className="lg:w-24 lg:h-24 h-14.5 w-14.5 cursor-pointer video-pause-design flex items-center justify-center rounded-full text-white shadow-2xl transform transition-transform hover:scale-110"
                                 >
-                                    <img className="w-10 h-10" src="/Pause.svg" alt="" />
+                                    <img className="w-6 h-6 lg:w-10 lg:h-10" src="/Pause.svg" alt="" />
                                 </button>
 
                                 {/* Skip Forward */}
-                                <button 
+                                <button
                                     onClick={skipForward}
-                                    className="text-white flex justify-center cursor-pointer items-center w-16 h-16 video-pause-design rounded-full  hover:text-[#6B6AFD] transition-transform transform hover:scale-110"
+                                    className="text-white flex justify-center cursor-pointer items-center w-[39px] h-[39px] lg:w-16 lg:h-16 video-pause-design rounded-full  hover:text-[#6B6AFD] transition-transform transform hover:scale-110"
                                     title="Forward 10s"
                                 >
-                                    <img className="w-8 h-6" src="/forward.svg" alt="" />
+                                    <img className="w-4 h-4 lg:w-8 lg:h-6" src="/forward.svg" alt="" />
                                 </button>
                             </div>
                         )}
                     </div>
 
                     {/* Description & Action */}
-                    <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-6">
-                        <p className="text-[#0E0636]/70 text-lg md:text-xl max-w-2xl leading-relaxed text-center md:text-left">
-                            {description}
+                    <div className="mt-8 flex flex-col items-center justify-between gap-8">
+                        <p className="text-[#0E0636] text-lg leading-relaxed text-center">
+                            When Carla joined GiftedForge, she was struggling to find consistent clients for her UI/UX projects. Within three months, she landed 8 high-quality projects through the platform. With GiftedForge’s secure escrow system and AI-powered matching, she now manages multiple clients confidently, delivering projects on time and growing her monthly
+                            income by 70%.
                         </p>
-                        <button 
+                        <button
                             onClick={onClose}
                             className="px-10 py-4 bg-[#6B6AFD] hover:bg-[#5a59e0] text-white font-bold rounded-full transition-all duration-300 shadow-lg shadow-[#6B6AFD]/20 whitespace-nowrap"
                         >
-                            Back to Stories
+                            Close
                         </button>
                     </div>
                 </div>

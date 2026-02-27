@@ -21,7 +21,7 @@ const Videos = () => {
     return (
         <div className="mt-17 lg:mt-37 flex flex-col px-6 lg:px-12 gap-6 pb-12">
             {/* Row 1 */}
-            <div className="grid grid-cols-1 xl:grid-cols-[432px_317px_545px] gap-6">
+            <div className="grid grid-cols-1 xl:grid-cols-[432px_317px_545px] gap-6 xl:justify-center">
                 <Thumbnail 
                     img="/story1.jpg" 
                     category="Design & Creative" 
@@ -58,7 +58,7 @@ const Videos = () => {
             </div>
 
             {/* Row 2 */}
-            <div className="grid grid-cols-1 xl:grid-cols-[432px_545px_318px] gap-6">
+            <div className="grid grid-cols-1 xl:grid-cols-[432px_545px_318px] gap-6 xl:justify-center">
                 <Thumbnail 
                     img="/emma.jpg" 
                     category="Writing & Content" 
@@ -95,7 +95,7 @@ const Videos = () => {
             </div>
 
             {/* Row 3 */}
-            <div className="grid grid-cols-1 xl:grid-cols-[432px_317px_545px] gap-6">
+            <div className="grid grid-cols-1 xl:grid-cols-[432px_317px_545px] gap-6 xl:justify-center">
                 <Thumbnail 
                     img="/story2.jpg" 
                     category="Photography & Visual Arts" 
