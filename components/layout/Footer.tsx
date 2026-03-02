@@ -31,11 +31,11 @@ const Footer = () => {
             </div>
             <div className="hidden md:block"></div>
             <div className="flex flex-col md:flex-row gap-6 text-white pt-12 md:pt-0">
-                <Link className="z-20" href="/about">About</Link>
-                <a href="">Projects</a>
-                <Link className="z-20" href="/success-stories">Success Stories</Link>
-                <a href="">For Clients</a>
-                <a href="">For Talents</a>
+                <Link className="z-20 p-1 h-fit border-b border-transparent hover:border-white" href="/about">About</Link>
+                <a className="p-1 border-b h-fit z-20 border-transparent hover:border-white" href="">Projects</a>
+                <Link className="z-20 p-1 h-fit border-b border-transparent hover:border-white" href="/success-stories">Success Stories</Link>
+                <a className="p-1 z-20 h-fit border-b border-transparent hover:border-white" href="">For Clients</a>
+                <a className="p-1 z-20 h-fit border-b border-transparent hover:border-white" href="">For Talents</a>
                 <a className="md:hidden" href="">Contact Us <img className="inline w-4 h-4 rotate-90 mb-1" src="/arrow-right.svg" alt="" /></a>
                 <a className="md:hidden" href="">Location <img className="inline w-4 h-4 rotate-90 mb-1" src="/arrow-right.svg" alt="" /></a>
                 <a className="md:hidden" href="">Languages <img className="inline w-4 h-4 rotate-90 mb-1" src="/arrow-right.svg" alt="" /></a>
