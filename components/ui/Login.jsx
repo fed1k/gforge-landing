@@ -13,7 +13,7 @@ const LoginBtn = () => {
     const menuItems = [
         { label: "Home", href: "/", classes: "xl:hidden" },
         { label: "About", href: "/about", classes: "xl:hidden" },
-        { label: "Success Stories", href: "/success", classes: "xl:hidden" },
+        { label: "Success Stories", href: "/success-stories", classes: "xl:hidden" },
         { label: "Contact Us", href: "/contact", classes: "xl:hidden border-b border-[#DAD8FF]" },
         { label: "For Client", href: "/client", classes: "" },
         { label: "For Talent", href: "/talent", classes: "" },
@@ -83,6 +83,7 @@ const LoginBtn = () => {
                         <Link
                             key={index}
                             href={item.href}
+                            onClick={() => setIsOpen(false)}
                             tabIndex={0}
                             className={`block ${item.classes} focus:text-[#6B6AFD] focus:bg-[#6B6AFD1A] px-4 py-2 active:text-[#6B6AFD] active:bg-[#6B6AFD1A] text-sm md:text-base md:font-medium text-[#2C2C2C] hover:text-[#6B6AFD] hover:bg-[#6B6AFD1A] transition-colors`}
                         >

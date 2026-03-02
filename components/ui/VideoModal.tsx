@@ -130,7 +130,7 @@ const VideoModal = ({
         }, 3000);
     };
 
-    const toggleFullscreen = (e) => {
+    const toggleFullscreen = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
         if (!videoRef.current) return;
         if (!document.fullscreenElement) {
@@ -144,24 +144,23 @@ const VideoModal = ({
 
     return (
         <div
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 overflow-y-auto"
-            style={{ backgroundColor: "#000000CC" }}
+            className="fixed inset-0 px-6 z-[100] flex items-start justify-center bg-black/80 pt-8 pb-16 overflow-y-auto overscroll-contain"
             onClick={onClose}
         >
             <div
-                className="relative w-full max-w-[1004px] bg-white rounded-[40px] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-500"
+                className="relative w-full max-w-[1004px] bg-white rounded-3xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-500"
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="p-6 md:p-12">
+                <div className="py-6 px-4 lg:p-20">
                     {/* Header */}
-                    <div className="flex justify-between items-start mb-8">
-                        <div className="">
-                            <h3 className="text-2xl md:text-3xl text-center font-semibold text-[#0E0636] leading-tight">
-                                How GiftedForge
-                                Helped a Freelance UI/UX Designer Scale
-                                Their Career
-                            </h3>
-                        </div>
+                    <div className="flex justify-center items-start mb-8">
+
+                        <h3 className="text-2xl lg:text-[32px] text-center font-semibold text-[#0E0636] leading-tight">
+                            How GiftedForge <br className="inline lg:hidden" />
+                            Helped a Freelance UI/<br className="inline lg:hidden" />UX <br className="hidden lg:inline" /> Designer Scale <br className="inline lg:hidden" />
+                            Their Career
+                        </h3>
+
                     </div>
 
                     {/* Video Container */}
@@ -219,16 +218,40 @@ const VideoModal = ({
                                         style={{ width: `${progress}%` }}
                                     />
 
-                                    {/* Circle dot that follows the progress end */}
+                                    {/* Time label + progress dot container */}
                                     <div
-                                        className={`absolute top-1/2 -translate-y-1/2 w-3 h-3  bg-white rounded-full border-4 border-white/90 shadow-[0_0_8px_rgba(255,255,255,0.7)]
-      transition-all duration-150 ease-out group-hover/progress:scale-125 group-hover/progress:shadow-lg
-      z-10
-    `}
+                                        className="
+            absolute top-1/2 -translate-y-1/2 pointer-events-none
+            transition-all duration-150 ease-out
+            z-30
+        "
                                         style={{
-                                            left: `calc(${progress}% - 8px)`, // half of 16px (w-4 = 1rem = 16px)
+                                            left: `calc(${progress}% - 8px)`, // centers on the dot (dot is w-4 = 16px wide)
                                         }}
-                                    />
+                                    >
+                                        {/* Always-visible time box */}
+                                        <div
+                                            className="
+                absolute bottom-full left-1/2 -translate-x-1/2 mb-3
+                px-3 pt-1.5 max-w-[48px] h-[26px] text-center border border-white
+                bg-[#D9D9D9] text-[#151010] text-[10px] video-player-tooltip-shadow rounded-lg
+                whitespace-nowrap tabular-nums
+            "
+                                        >
+                                            {formatTime(currentTime)}
+                                        </div>
+
+                                        {/* The rounded progress dot */}
+                                        <div
+                                            className={`
+                w-4 h-4 bg-white rounded-full 
+                border-4 border-white/90
+                shadow-[0_0_10px_rgba(255,255,255,0.7)]
+                transition-all duration-150 ease-out
+                group-hover/progress:scale-125 group-hover/progress:shadow-lg
+            `}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -287,7 +310,7 @@ const VideoModal = ({
                         </p>
                         <button
                             onClick={onClose}
-                            className="px-10 py-4 bg-[#6B6AFD] hover:bg-[#5a59e0] text-white font-bold rounded-full transition-all duration-300 shadow-lg shadow-[#6B6AFD]/20 whitespace-nowrap"
+                            className="px-10 py-4 bg-[#6B6AFD] hover:shadow-[0px_4px_24px_0px_#00000029] focus:shadow-[0px_4px_24px_0px_#00000029]  active:shadow-[0px_4px_24px_0px_#00000029] text-white font-bold rounded-full transition-all cursor-pointer duration-300 whitespace-nowrap"
                         >
                             Close
                         </button>
