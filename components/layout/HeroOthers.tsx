@@ -10,7 +10,7 @@ const poppins = Poppins({
 
 const HeroOthers = ({ isAbout = true, subtextWidth = "lg:max-w-[690px] max-w-[345px]", title = "About GiftedForge", subtext = "Welcome to the future of freelancing. GiftedForge combines advanced AI protection, instant payments, and a modern, futuristic design to create a secure and seamless experience for freelancers and clients worldwide." }) => {
     return (
-        <section className="mx-3 opacity-0 animate-[fadeUp_1s_ease-out_forwards] h-[688px] lg:h-[606px] relative flex items-center flex-col justify-center lg:mx-6 relative overflow-hidden mb-3 bg-[#6B6AFD] px-3 rounded-3xl">
+        <section className="mx-3 h-[688px] lg:h-[606px] relative flex items-center flex-col justify-center lg:mx-6 relative overflow-hidden mb-3 bg-[#6B6AFD] px-3 rounded-3xl">
             {isAbout &&
 
                 <>

@@ -12,7 +12,7 @@ const poppins = Poppins({
 
 const Hero = () => {
     return (
-        <section className="mx-3 opacity-0 animate-[fadeUp_1s_ease-out_forwards] md:mx-6 overflow-hidden relative flex flex-col justify-center bg-linear pt-25 md:pt-37 pb-14.75 rounded-[20px] ">
+        <section className="mx-3 md:mx-6 overflow-hidden relative flex flex-col justify-center bg-linear pt-25 md:pt-37 pb-14.75 rounded-[20px] ">
             {/* Center top logo */}
             <img src="/logogroup.svg" className="absolute left-[33%] -top-5 md:-top-[4%] md:left-[45%] w-[104px] h-[123px] md:w-[146px] md:h-[178px] animate-float" alt="" />
 

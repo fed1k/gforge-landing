@@ -211,3 +211,23 @@
 .video-player-tooltip-shadow {
     box-shadow: 0px 4px 16px 0px #00000040; 
 }
+
+::view-transition-group(root) {
+    z-index: auto !important;
+}
+
+::view-transition-image-pair(root) {
+    isolation: isolate;
+    will-change: transform, opacity, scale;
+    z-index: 1;
+}
+
+::view-transition-new(root) {
+    z-index: 2;
+    animation: none !important;
+}
+
+::view-transition-old(root) {
+    z-index: 1;
+    animation: none !important;
+}
