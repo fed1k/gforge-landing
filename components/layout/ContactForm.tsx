@@ -1,9 +1,9 @@
 const ContactForm = () => {
     return (
-        <div className="bg-[#F5F7FB] rounded-3xl mb-[63px] px-4 gap-12 py-12 lg:p-12 mx-6 lg:mx-12 flex flex-col lg:gap-12.5 lg:flex-row">
+        <div className="bg-[#F5F7FB] rounded-3xl mb-[63px] px-4 gap-12 py-12 lg:p-12 mx-6 lg:mx-12 flex flex-col lg:items-center lg:gap-12.5 lg:flex-row">
             <div>
-                <h3 className="font-semibold text-[32px] text-[#0E0636]">Get in <span className="w-11 inline-block rounded-full -translate-y-2.5 h-0 border-2 border-[#0E0636]"></span></h3>
-                <p className="font-medium text-[32px] text-[#0E0636]">touch with us</p>
+                <h3 className="font-semibold text-[28px] lg:text-[32px] text-[#0E0636]">Get in <span className="w-11 inline-block rounded-full -translate-y-2.5 h-0 border-2 border-[#0E0636]"></span></h3>
+                <p className="font-medium text-[28px] lg:text-[32px] text-[#0E0636]">touch with us</p>
                 <p className="pt-6 pb-8 text-[#0E0636] md:max-w-[396px] leading-[148%] lg:leading-[138%]">Your growth matters to us. Reach out anytime for guidance, clear answers, and dedicated support together, we’ll take your talent to the next level.</p>
                 <p className="font-semibold text-sm text-[#0E0636]">Email:</p>
                 <p className="pt-3 pb-6 text-sm text-[#0E0636]">GiftedForge@gmail.com</p>
@@ -37,10 +37,10 @@ const ContactForm = () => {
 
                 <div className="pt-6">
                     <label className="block pb-4 lg:text-base font-semibold text-sm text-[#0E0636]" htmlFor="message">Message</label>
-                    <textarea className="py-4.5 w-full min-h-[150px] rounded-xl placeholder:font-light placeholder:text-[#0E0636] px-4 bg-[#F5F7FB]" name="" id="message" placeholder="Message" />
+                    <textarea className="py-4.5 resize-none w-full min-h-[150px] rounded-xl placeholder:font-light placeholder:text-[#0E0636] px-4 bg-[#F5F7FB]" name="" id="message" placeholder="Message" />
                 </div>
 
-                <button className="h-12 w-[235px] text-white font-semibold mt-12 bg-[#6B6AFD] block mx-auto rounded-full">Submit</button>
+                <button type="button" tabIndex={0} className="h-12 w-[235px] text-white cursor-pointer focus-within:shadow-[0px_4px_24px_0px_#00000029] hover:shadow-[0px_4px_24px_0px_#00000029] font-semibold mt-12 bg-[#6B6AFD] block mx-auto rounded-full">Submit</button>
             </form>
         </div>
     )

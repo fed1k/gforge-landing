@@ -1,11 +1,11 @@
 import Image from "next/image";
 
 const companies = [
-    { logo: "githublogo.svg", name: "GitHub" },
-    { logo: "stripelogo.svg", name: "Stripe" },
-    { logo: "gitlablogo.svg", name: "GitLab" },
-    { logo: "paypallogo.svg", name: "PayPal" },
-    { logo: "wiselogo.svg", name: "Wise" },
+    { logo: "/githublogo.svg", name: "GitHub" },
+    { logo: "/stripelogo.svg", name: "Stripe" },
+    { logo: "/gitlablogo.svg", name: "GitLab" },
+    { logo: "/paypallogo.svg", name: "PayPal" },
+    { logo: "/wiselogo.svg", name: "Wise" },
 ];
 
 const TrustedComps = () => {

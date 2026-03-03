@@ -33,7 +33,7 @@ const Navbar = () => {
                     <NavLink classNames="px-4 pb-[3px] border-b text-[#2C2C2C] font-medium" href="/">Home</NavLink>
                     <NavLink classNames="px-4 pb-[3px] border-b text-[#2C2C2C] font-medium" href="/about">About</NavLink>
                     <NavLink classNames="px-4 pb-[3px] border-b text-[#2C2C2C] font-medium" href="/success-stories">Success Stories</NavLink>
-                    <NavLink classNames="pl-4 pb-[3px] border-b pr-12 text-[#2C2C2C] font-medium" href="/contact">Contact Us</NavLink>
+                    <NavLink classNames="pl-4 pb-[3px] border-b pr-4 mr-8 text-[#2C2C2C] font-medium" href="/contact">Contact Us</NavLink>
                     
                     
                 
