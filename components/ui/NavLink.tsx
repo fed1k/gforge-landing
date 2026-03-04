@@ -39,16 +39,16 @@ const pageAnimation = () => {
   document.documentElement.animate(
     [
       {
-        opacity: 1,
-        scale: 1,
+        // opacity: 1,
+        // scale: 1,
         transform: 'translateY(0)'
       }, {
-        opacity: 0.5,
-        scale: 0.9,
-        transform: 'translateY(-100px)'
+        // opacity: 0.5,
+        // scale: 0.9,
+        transform: 'translateY(-100vh)'
       }
     ], {
-      duration: 1000,
+      duration: 2000,
       easing: 'cubic-bezier(0.76, 0, 0.24, 1)',
       fill: 'forwards',
       pseudoElement: '::view-transition-old(root)'
@@ -63,7 +63,7 @@ const pageAnimation = () => {
         transform: 'translateY(0)'
       }
     ], {
-      duration: 1000,
+      duration: 1900,
       easing: 'cubic-bezier(0.76, 0, 0.24, 1)',
       fill: 'forwards',
       pseudoElement: '::view-transition-new(root)'
