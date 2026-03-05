@@ -2,6 +2,7 @@ import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import BlackLogo from "../ui/logoblack";
 import SocialContacts from "../ui/SocialContacts";
 import Link from "next/link";
+import NavLink from "../ui/NavLink";
 
 const Footer = () => {
     return (
@@ -27,13 +28,13 @@ const Footer = () => {
 
                 <BlackLogo mode="white" />
                 <p className="text-[#DAD8FF] text-sm pt-8 pb-6 ">The future of freelancing is here. We bring together top talent and cutting-edge technology to build extraordinary products fast, smart, and seamless.</p>
-                <Link href="/about" className="text-xs text-white border border-white hover:bg-[#6B6AFD] rounded-full px-3 inline-flex items-center gap-1 py-[5px]">Read More About Us <img className="w-3.5 h-3.5" src="/arrow-right.svg" alt="" /> </Link>
+                <NavLink href="/about" classNames="text-xs text-white border border-white hover:bg-[#6B6AFD] rounded-full px-3 inline-flex items-center gap-1 py-[5px]">Read More About Us <img className="w-3.5 h-3.5" src="/arrow-right.svg" alt="" /> </NavLink>
             </div>
             <div className="hidden md:block"></div>
             <div className="flex flex-col md:flex-row gap-6 text-white pt-12 md:pt-0">
-                <Link className="z-20 p-1 h-fit border-b border-transparent hover:border-white" href="/about">About</Link>
+                <NavLink classNames="z-20 p-1 text-white h-fit border-b border-transparent hover:border-white" href="/about">About</NavLink>
                 <a className="p-1 border-b h-fit z-20 border-transparent hover:border-white" href="">Projects</a>
-                <Link className="z-20 p-1 h-fit border-b border-transparent hover:border-white" href="/success-stories">Success Stories</Link>
+                <NavLink classNames="z-20 p-1 h-fit border-b text-white border-transparent hover:border-white" href="/success-stories">Success Stories</NavLink>
                 <a className="p-1 z-20 h-fit border-b border-transparent hover:border-white" href="">For Clients</a>
                 <a className="p-1 z-20 h-fit border-b border-transparent hover:border-white" href="">For Talents</a>
                 <a className="md:hidden" href="">Contact Us <img className="inline w-4 h-4 rotate-90 mb-1" src="/arrow-right.svg" alt="" /></a>

@@ -4,11 +4,14 @@ import { useState, useRef, useEffect } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 import Link from "next/link";
+import NavLink from "./NavLink";
+import { usePathname } from "next/navigation";
 
 const LoginBtn = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [languageOpen, setLanguageOpen] = useState(false);
     const dropdownRef = useRef(null);
+    const pathname = usePathname()
 
     const menuItems = [
         { label: "Home", href: "/", classes: "xl:hidden" },
@@ -40,6 +43,10 @@ const LoginBtn = () => {
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+
+    useEffect(() => {
+        setIsOpen(false)
+    }, [pathname])
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -80,15 +87,15 @@ const LoginBtn = () => {
             {isOpen && (
                 <div className="absolute right-0 mt-2 w-56 md:w-45.5 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
                     {menuItems.map((item, index) => (
-                        <Link
+                        <NavLink
                             key={index}
                             href={item.href}
-                            onClick={() => setIsOpen(false)}
+                            // onClick={() => setIsOpen(false)}
                             tabIndex={0}
-                            className={`block ${item.classes} focus:text-[#6B6AFD] focus:bg-[#6B6AFD1A] px-4 py-2 active:text-[#6B6AFD] active:bg-[#6B6AFD1A] text-sm md:text-base md:font-medium text-[#2C2C2C] hover:text-[#6B6AFD] hover:bg-[#6B6AFD1A] transition-colors`}
+                            classNames={`block ${item.classes} focus:text-[#6B6AFD] focus:bg-[#6B6AFD1A] px-4 py-2 active:text-[#6B6AFD] active:bg-[#6B6AFD1A] text-sm md:text-base md:font-medium text-[#2C2C2C] hover:text-[#6B6AFD] hover:bg-[#6B6AFD1A] transition-colors`}
                         >
                             {item.label}
-                        </Link>
+                        </NavLink>
                     ))}
 
                     <div className="relative xl:hidden border-t border-[#DAD8FF]">

@@ -7,10 +7,11 @@ import { usePathname } from "next/navigation"
 interface NavLinkProps {
   href: string
   children: React.ReactNode,
-  classNames: string
+  classNames: string,
+  activeState?: boolean
 }
 
-const NavLink = ({ href, children, classNames }: NavLinkProps) => {
+const NavLink = ({ href, children, classNames, activeState = true }: NavLinkProps) => {
   const pathname = usePathname()
 
   const router = useTransitionRouter()
@@ -29,7 +30,7 @@ const NavLink = ({ href, children, classNames }: NavLinkProps) => {
         })
 
       }}
-      className={`${classNames} ${isActive? "border-[#6B6AFD] text-[#6B6AFD]" : "border-transparent text-[#2C2C2C] "}`}>
+      className={`${isActive && activeState? "border-[#6B6AFD] text-[#6B6AFD]" : "border-transparent text-[#2C2C2C] "} ${classNames}`}>
       {children}
     </Link>
   )
