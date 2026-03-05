@@ -8,10 +8,11 @@ interface NavLinkProps {
   href: string
   children: React.ReactNode,
   classNames: string,
-  activeState?: boolean
+  activeState?: boolean,
+  tabIndex?: number
 }
 
-const NavLink = ({ href, children, classNames, activeState = true }: NavLinkProps) => {
+const NavLink = ({ href, children, classNames, activeState = true, tabIndex }: NavLinkProps) => {
   const pathname = usePathname()
 
   const router = useTransitionRouter()
@@ -23,8 +24,10 @@ const NavLink = ({ href, children, classNames, activeState = true }: NavLinkProp
   return (
     <Link
       href={href}
+      tabIndex={tabIndex}
       onClick={(e) => {
         e.preventDefault()
+        e.currentTarget.focus()
         router.push(href, {
           onTransitionReady: pageAnimation
         })

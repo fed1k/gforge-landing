@@ -26,6 +26,8 @@ const VideoModal = ({
     const [currentTime, setCurrentTime] = useState(0);
     const videoRef = useRef<HTMLVideoElement>(null);
     const [showControls, setShowControls] = useState(true);
+    const [viddescription, setVidDescription] = useState("When Carla joined GiftedForge, she was struggling to find consistent clients for her UI/UX projects. Within three months, she landed 8 high-quality projects through the platform. With GiftedForge’s secure escrow system and AI-powered matching, she now manages multiple clients confidently, delivering projects on time and growing her monthly income by 70%.")
+    const [expanded, setExpanded] = useState(false)
     const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
@@ -305,8 +307,16 @@ const VideoModal = ({
                     {/* Description & Action */}
                     <div className="mt-8 flex flex-col items-center justify-between gap-8">
                         <p className="text-[#0E0636] text-lg leading-relaxed text-center">
-                            When Carla joined GiftedForge, she was struggling to find consistent clients for her UI/UX projects. Within three months, she landed 8 high-quality projects through the platform. With GiftedForge’s secure escrow system and AI-powered matching, she now manages multiple clients confidently, delivering projects on time and growing her monthly
-                            income by 70%.
+                            {expanded ? viddescription : `${viddescription.slice(0, 80)}`}
+                            {' '}
+                            {!expanded && (
+                                <button
+                                    onClick={() => setExpanded(v => !v)}
+                                    className="text-[#6B6AFD]"
+                                >
+                                    {expanded ? 'less' : 'read more...'}
+                                </button>
+                            )}
                         </p>
                         <button
                             onClick={onClose}
