@@ -201,15 +201,10 @@
     }
 }
 
-.video-pause-design {
-    box-shadow: -0.73px 0.73px 0.73px -1.46px #FFFFFF59 inset;
-    backdrop-filter: blur(20px);
-    border: 1px solid;
-    border-image-source: linear-gradient(202.36deg, rgba(255, 255, 255, 0.2) 8.26%, rgba(255, 255, 255, 0) 85.43%);
-}
+
 
 .video-player-tooltip-shadow {
-    box-shadow: 0px 4px 16px 0px #00000040; 
+    box-shadow: 0px 4px 16px 0px #00000040;
 }
 
 ::view-transition-group(root) {

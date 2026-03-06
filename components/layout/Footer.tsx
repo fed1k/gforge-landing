@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import BlackLogo from "../ui/logoblack";
 import SocialContacts from "../ui/SocialContacts";
@@ -7,6 +8,13 @@ import Link from "next/link";
 import NavLink from "../ui/NavLink";
 
 const Footer = () => {
+    const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
+    const toggleDropdown = (name: string) => {
+        console.log("haha boy")
+        setOpenDropdown(prev => (prev === name ? null : name));
+    };
+
     return (
         <footer className="mx-3 md:mx-6 relative overflow-hidden mb-3 grid grid-cols-1 md:gap-y-10 md:grid-cols-[1fr_1fr_1.6fr] md:justify-between bg-[#0E0636] px-6 py-17 md:py-25 rounded-3xl">
             <img className="absolute w-[146px] h-[178px] md:top-[25%] md:-left-[5%] top-[13%] -left-[7%] animate-float" src="/logoparticle.svg" alt="" />
@@ -39,9 +47,33 @@ const Footer = () => {
                 <NavLink classNames="z-20 p-1 h-fit border-b text-white w-fit outline-none focus:border-white border-transparent hover:border-white" href="/success-stories">Success Stories</NavLink>
                 <a onClick={(e) => e.currentTarget.focus()} tabIndex={0} className="p-1 z-20 h-fit border-b border-transparent w-fit focus:border-white hover:border-white" href="">For Clients</a>
                 <a onClick={(e) => e.currentTarget.focus()} tabIndex={0} className="p-1 z-20 h-fit border-b border-transparent w-fit focus:border-white hover:border-white" href="">For Talents</a>
-                <a className="md:hidden" href="">Contact Us <img className="inline w-4 h-4 rotate-90 mb-1" src="/arrow-right.svg" alt="" /></a>
-                <a className="md:hidden" href="">Location <img className="inline w-4 h-4 rotate-90 mb-1" src="/arrow-right.svg" alt="" /></a>
-                <a className="md:hidden" href="">Languages <img className="inline w-4 h-4 rotate-90 mb-1" src="/arrow-right.svg" alt="" /></a>
+                <div className="md:hidden">
+                    <button onClick={() => toggleDropdown('contact')} className="flex cursor-pointer relative z-30 items-center gap-1 focus:outline-none">
+                        Contact Us <img className={`inline w-4 h-4 transition-transform ${openDropdown === 'contact' ? 'rotate-[-90deg]' : 'rotate-90'} mb-1`} src="/arrow-right.svg" alt="" />
+                    </button>
+                    {openDropdown === 'contact' && (
+                        <p className="text-xs text-[#DAD8FF] pt-2 font-normal">(+7) 924- 885-2888 <br />GiftedForge@gmail.com</p>
+                    )}
+                </div>
+                <div className="md:hidden">
+                    <button onClick={() => toggleDropdown('location')} className="flex z-30 cursor-pointer relative items-center gap-1 focus:outline-none">
+                        Location <img className={`inline w-4 h-4 transition-transform ${openDropdown === 'location' ? 'rotate-[-90deg]' : 'rotate-90'} mb-1`} src="/arrow-right.svg" alt="" />
+                    </button>
+                    {openDropdown === 'location' && (
+                        <p className="text-xs text-[#DAD8FF] pt-2">Yuzhno-Sakhalinsk, Russia <br />Mira Avenue, 267</p>
+                    )}
+                </div>
+                <div className="md:hidden">
+                    <button onClick={() => toggleDropdown('languages')} className="flex z-30 relative cursor-pointer items-center gap-1 focus:outline-none">
+                        Languages <img className={`inline w-4 h-4 transition-transform ${openDropdown === 'languages' ? 'rotate-[-90deg]' : 'rotate-90'} mb-1`} src="/arrow-right.svg" alt="" />
+                    </button>
+                    {openDropdown === 'languages' && (
+                        <div className="flex items-center gap-4.5 pt-2">
+                            <p className="text-xs">En</p>
+                            <p className="text-xs text-[#DAD8FF]">Ru</p>
+                        </div>
+                    )}
+                </div>
             </div>
 
 

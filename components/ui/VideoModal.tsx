@@ -66,6 +66,10 @@ const VideoModal = ({
                 videoRef.current.pause();
             } else {
                 videoRef.current.play();
+                setTimeout(() => {
+
+                    setShowControls(false)
+                }, 400)
             }
             setIsPlaying(!isPlaying);
         }
@@ -157,10 +161,8 @@ const VideoModal = ({
                     {/* Header */}
                     <div className="flex justify-center items-start mb-8">
 
-                        <h3 className="text-2xl lg:text-[32px] text-center font-semibold text-[#0E0636] leading-tight">
-                            How GiftedForge <br className="inline lg:hidden" />
-                            Helped a Freelance UI/<br className="inline lg:hidden" />UX <br className="hidden lg:inline" /> Designer Scale <br className="inline lg:hidden" />
-                            Their Career
+                        <h3 className="text-xl lg:text-[32px] text-center font-semibold text-[#0E0636] leading-[138%]">
+                            How GiftedForge Helped a <br className="inline lg:hidden" /> Freelance UI/UX <br className="hidden lg:inline" /> Designer Scale Their Career
                         </h3>
 
                     </div>
@@ -180,7 +182,6 @@ const VideoModal = ({
                             onLoadedMetadata={handleLoadedMetadata}
                             onPlay={() => setIsPlaying(true)}
                             onPause={() => setIsPlaying(false)}
-                            autoPlay
                         />
 
                         {/* Controls Overlay */}
@@ -259,13 +260,13 @@ const VideoModal = ({
                         </div>
 
                         {/* Center Controls */}
-                        {!isPlaying && (
+                        {(!isPlaying || showControls) && (
                             <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-all z-20 gap-2.5">
 
                                 {/* full screnn */}
                                 <button
                                     onClick={toggleFullscreen}
-                                    className="text-white flex top-6 right-6 absolute justify-center items-center cursor-pointer w-[35px] h-[38px] lg:w-12 lg:h-12 video-pause-design rounded-full hover:text-[#6B6AFD] transition-transform transform hover:scale-110"
+                                    className="text-white flex top-6 right-6 absolute justify-center items-center cursor-pointer w-[35px] h-[38px] lg:w-12 lg:h-12 rounded-full hover:text-[#6B6AFD] transition-transform transform hover:scale-110"
                                     title="Back 10s"
                                 >
                                     <img className="w-6 h-6 " src="/fullscreen.svg" alt="" />
@@ -275,7 +276,7 @@ const VideoModal = ({
                                 {/* Skip Backward */}
                                 <button
                                     onClick={skipBackward}
-                                    className="text-white flex justify-center items-center cursor-pointer w-[39px] h-[39px] lg:w-16 lg:h-16 video-pause-design rounded-full hover:text-[#6B6AFD] transition-transform transform hover:scale-110"
+                                    className="text-white flex justify-center bg-[#FFFFFF33] items-center cursor-pointer w-8.5 h-8.5 lg:w-16 lg:h-16 rounded-full hover:text-[#6B6AFD] transition-transform transform hover:scale-110"
                                     title="Back 10s"
                                 >
                                     <img className="w-4 h-4 lg:w-8 lg:h-8" src="/back.svg" alt="" />
@@ -287,18 +288,24 @@ const VideoModal = ({
                                         e.stopPropagation();
                                         togglePlay();
                                     }}
-                                    className="lg:w-24 lg:h-24 h-14.5 w-14.5 cursor-pointer video-pause-design flex items-center justify-center rounded-full text-white shadow-2xl transform transition-transform hover:scale-110"
+                                    className="lg:w-24 lg:h-24 h-14.5 w-14.5 cursor-pointer  flex items-center justify-center rounded-full transform transition-transform hover:scale-110"
                                 >
-                                    <img className="w-6 h-6 lg:w-10 lg:h-10" src="/Pause.svg" alt="" />
+                                    {isPlaying ? (
+
+                                        <img className="w-full h-full" src="/pause-circle.svg" alt="" />
+
+                                    ) : (
+                                        <img className="w-full h-full" src="/video-circle.svg" alt="" />
+                                    )}
                                 </button>
 
                                 {/* Skip Forward */}
                                 <button
                                     onClick={skipForward}
-                                    className="text-white flex justify-center cursor-pointer items-center w-[39px] h-[39px] lg:w-16 lg:h-16 video-pause-design rounded-full  hover:text-[#6B6AFD] transition-transform transform hover:scale-110"
+                                    className="text-white flex justify-center cursor-pointer bg-[#FFFFFF33] items-center w-8.5 h-8.5 lg:w-16 lg:h-16  rounded-full  hover:text-[#6B6AFD] transition-transform transform hover:scale-110"
                                     title="Forward 10s"
                                 >
-                                    <img className="w-4 h-4 lg:w-8 lg:h-6" src="/forward.svg" alt="" />
+                                    <img className="w-4 h-4 lg:w-8 lg:h-8" src="/forward.svg" alt="" />
                                 </button>
                             </div>
                         )}
@@ -306,17 +313,23 @@ const VideoModal = ({
 
                     {/* Description & Action */}
                     <div className="mt-8 flex flex-col items-center justify-between gap-8">
-                        <p className="text-[#0E0636] text-lg leading-relaxed text-center">
-                            {expanded ? viddescription : `${viddescription.slice(0, 80)}`}
-                            {' '}
-                            {!expanded && (
-                                <button
-                                    onClick={() => setExpanded(v => !v)}
-                                    className="text-[#6B6AFD]"
-                                >
-                                    {expanded ? 'less' : 'read more...'}
-                                </button>
-                            )}
+                        <p className="text-[#0E0636] leading-relaxed text-center">
+                            {/* Mobile Description with Toggle */}
+                            <span className="lg:hidden">
+                                {expanded ? viddescription : `${viddescription.slice(0, 80)}...`}
+                            </span>
+
+                            {/* Desktop Full Description */}
+                            <span className="hidden lg:inline">
+                                {viddescription}
+                            </span>
+
+                            <button
+                                onClick={() => setExpanded(v => !v)}
+                                className="text-[#6B6AFD] lg:hidden ml-1"
+                            >
+                                {expanded ? 'less' : 'read more'}
+                            </button>
                         </p>
                         <button
                             onClick={onClose}

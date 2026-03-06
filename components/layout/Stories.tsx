@@ -59,28 +59,28 @@ const Stories = () => {
                 <button className="hidden md:block  font-medium text-[#0E0636] cursor-pointer py-2 px-7 border border-[#0E0636] rounded-full">View All</button>
             </div>
             <div
-                className="flex gap-4 overflow-x-auto overflow-y-hidden -mx-6 px-6 scrollbar-hide lg:overflow-x-scroll lg:[&::-webkit-scrollbar]:hidden lg:[-ms-overflow-style:none] lg:[scrollbar-width:none]"
+                className="flex gap-4 lg:gap-[35px] overflow-x-auto overflow-y-hidden -mx-6 px-6 scrollbar-hide lg:overflow-x-scroll lg:[&::-webkit-scrollbar]:hidden lg:[-ms-overflow-style:none] lg:[scrollbar-width:none]"
             >
                 <div
-                    className={`w-86.25 lg:max-w-[635px] h-[402px] min-h-80 lg:h-140 shrink-0 transition-all duration-300 ${activeCard === 1 ? 'lg:flex-1 lg:shrink' : 'lg:w-50'}`}
+                    className={`w-86.25 lg:max-w-[635px] h-[402px] min-h-80 lg:h-140 shrink-0 transition-all duration-300 ${activeCard === 1 ? 'lg:flex-1 lg:shrink' : 'lg:w-[257px]'}`}
                     onMouseEnter={() => setActiveCard(1)}
                 >
                     <SuccessCard index={1} img={cardData[0].img} link="" name={cardData[0].name} date={cardData[0].date} category={cardData[0].category} title={cardData[0].title} isActive={activeCard === 1} onWatchClick={() => handleWatchClick("https://www.w3schools.com/html/mov_bbb.mp4")} />
                 </div>
                 <div
-                    className={`w-86.25 lg:max-w-[635px] h-[402px] lg:h-140 shrink-0 transition-all duration-300 ${activeCard === 2 ? 'lg:flex-1 lg:shrink' : 'lg:w-50'}`}
+                    className={`w-86.25 lg:max-w-[635px] h-[402px] lg:h-140 shrink-0 transition-all duration-300 ${activeCard === 2 ? 'lg:flex-1 lg:shrink' : 'lg:w-[257px]'}`}
                     onMouseEnter={() => setActiveCard(2)}
                 >
                     <SuccessCard index={2} img={cardData[1].img} link="" name={cardData[1].name} date={cardData[1].date} category={cardData[1].category} title={cardData[1].title} isActive={activeCard === 2} onWatchClick={() => handleWatchClick("https://www.w3schools.com/html/mov_bbb.mp4")} />
                 </div>
                 <div
-                    className={`w-86.25 lg:max-w-[635px] h-[402px] lg:h-140 shrink-0 transition-all duration-300 ${activeCard === 3 ? 'lg:flex-1 lg:shrink' : 'lg:w-50'}`}
+                    className={`w-86.25 lg:max-w-[635px] h-[402px] lg:h-140 shrink-0 transition-all duration-300 ${activeCard === 3 ? 'lg:flex-1 lg:shrink' : 'lg:w-51.5'}`}
                     onMouseEnter={() => setActiveCard(3)}
                 >
                     <SuccessCard index={3} img={cardData[2].img} link="" name={cardData[2].name} date={cardData[2].date} category={cardData[2].category} title={cardData[2].title} isActive={activeCard === 3} onWatchClick={() => handleWatchClick("https://www.w3schools.com/html/mov_bbb.mp4")} />
                 </div>
                 <div
-                    className={`w-86.25 lg:max-w-[635px] h-[402px] lg:h-140 shrink-0 transition-all duration-300 ${activeCard === 4 ? 'lg:flex-1 lg:shrink' : 'lg:w-50'}`}
+                    className={`w-86.25 lg:max-w-[635px] h-[402px] lg:h-140 shrink-0 transition-all duration-300 ${activeCard === 4 ? 'lg:flex-1 lg:shrink' : 'lg:w-[141px]'}`}
                     onMouseEnter={() => setActiveCard(4)}
                 >
                     <SuccessCard index={4} img={cardData[3].img} link="" name={cardData[3].name} date={cardData[3].date} category={cardData[3].category} title={cardData[3].title} isActive={activeCard === 4} onWatchClick={() => handleWatchClick("https://www.w3schools.com/html/mov_bbb.mp4")} />
