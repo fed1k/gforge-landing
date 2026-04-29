@@ -57,7 +57,7 @@ const ComingSoon = () => {
     };
 
     return (
-        <div className={`bg-[#DAD8FF] relative min-h-screen pt-[100px] xl:pt-[168px] overflow-hidden ${outfit.className}`}>
+        <div className={`bg-[#DAD8FF]  min-h-screen pt-[100px] xl:pt-[168px] overflow-hidden ${outfit.className}`}>
 
             <div className="px-6 xl:px-20 2xl:px-[116px]">
 
@@ -67,12 +67,12 @@ const ComingSoon = () => {
 
 
                     <p className="font-light text-xl md:text-2xl text-[#0E0636]">GiftedForge unifies Telegram <br className="lg:hidden" /> assets & NFTs. <br className="hidden lg:inline" />
-                        Mint, trade, and <br className="lg:hidden" /> manage across chains—mobile-first.</p>
+                        Mint, trade, and <br className="lg:hidden" /> manage across chains— <br className="sm:hidden" /> mobile-first.</p>
 
                     <div className="flex flex-col sm:flex-row lg:items-center mt-12 lg:mt-0">
                         <div className="relative">
                             <input
-                                className={`border lg:ml-10 outline-none xl:ml-[166px] border-[#666F8B] h-[52px] w-full sm:w-[345px] lg:w-[378px] rounded-full px-6 placeholder:text-[#666F8B] ${status === "error" ? "border-red-500" : ""}`}
+                                className={`border lg:ml-10 outline-none xl:ml-[166px] border-[#666F8B] h-[52px] w-[345px] lg:w-[378px] rounded-full px-6 placeholder:text-[#666F8B] ${status === "error" ? "border-red-500" : ""}`}
                                 placeholder="Please enter your e-mail adress"
                                 type="email"
                                 value={email}
@@ -89,7 +89,7 @@ const ComingSoon = () => {
                         <button
                             onClick={handleNotifyMe}
                             disabled={status === "loading"}
-                            className="block mt-6 sm:mt-0 sm:ml-2.5 text-white font-medium bg-[#7B61FF] w-full sm:w-[142px] h-[52px] rounded-[40px] disabled:opacity-50"
+                            className="block mt-6 sm:mt-0 sm:ml-2.5 text-white font-medium bg-[#7B61FF] w-[142px] h-[52px] rounded-[40px] disabled:opacity-50"
                         >
                             {status === "loading" ? "Sending..." : "Notify Me"}
                         </button>
@@ -97,7 +97,7 @@ const ComingSoon = () => {
                 </div>
             </div>
 
-            <div className="bg-[#FFFFFF] absolute bottom-[120px] lg:bottom-[126px] w-[110%] -left-[5%] text-nowrap overflow-hidden text-xl uppercase py-2 font-medium text-[#0E0636] -rotate-[4.25deg] flex justify-center">Coming Soon  |  Coming Soon  |  Coming Soon  |    Coming Soon  |   Coming Soon  |    Coming Soon  |  Coming Soon  |  Coming Soon  |    Coming Soon  |   Coming Soon  |    Coming Soon</div>
+            <div className="bg-[#FFFFFF] min-w-[1474px] sm:mt-[100px] text-nowrap overflow-hidden text-xl uppercase py-2 font-medium text-[#0E0636] -rotate-[4.25deg] flex justify-center">Coming Soon  |  Coming Soon  |  Coming Soon  |    Coming Soon  |   Coming Soon  |    Coming Soon  |  Coming Soon  |  Coming Soon  |    Coming Soon  |   Coming Soon  |    Coming Soon</div>
         </div>
     )
 }
