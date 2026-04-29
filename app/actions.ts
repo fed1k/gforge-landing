@@ -9,7 +9,7 @@ export async function sendEmailToTelegram(email: string) {
     return { success: false, error: "Server configuration error" };
   }
 
-  const message = `New subscription for Coming Soon: ${email}`;
+  const message = `Wishlist request for Coming Soon: ${email}`;
   const url = `https://api.telegram.org/bot${token}/sendMessage`;
 
   try {

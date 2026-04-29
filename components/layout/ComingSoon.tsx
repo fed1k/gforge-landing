@@ -2,7 +2,7 @@
 
 import { Outfit } from "next/font/google";
 import { useState } from "react";
-// import { sendEmailToTelegram } from "@/app/actions";
+import { sendEmailToTelegram } from "@/app/actions";
 
 const outfit = Outfit({
     subsets: ['latin'],
@@ -26,14 +26,14 @@ const ComingSoon = () => {
 
     const handleNotifyMe = async () => {
         if (!email) {
-            // setStatus("error");
-            // setMessage("Please enter an email address.");
+            setStatus("error");
+            setMessage("Please enter an email address.");
             return;
         }
 
         if (!validateEmail(email)) {
-            // setStatus("error");
-            // setMessage("Please enter a valid email address.");
+            setStatus("error");
+            setMessage("Please enter a valid email address.");
             return;
         }
 
@@ -41,18 +41,18 @@ const ComingSoon = () => {
         setMessage("");
 
         try {
-            // const result = await sendEmailToTelegram(email);
-            // if (result.success) {
+            const result = await sendEmailToTelegram(email);
+            if (result.success) {
                 setStatus("success");
                 setMessage("Thank you! We'll notify you soon.");
                 setEmail("");
-            // } else {
-                // setStatus("error");
-                // setMessage(result.error || "Something went wrong. Please try again.");
-            // }
+            } else {
+                setStatus("error");
+                setMessage(result.error || "Something went wrong. Please try again.");
+            }
         } catch (error) {
-            // setStatus("error");
-            // setMessage("An error occurred. Please try again.");
+            setStatus("error");
+            setMessage("An error occurred. Please try again.");
         }
     };
 
@@ -71,10 +71,10 @@ const ComingSoon = () => {
 
                     <div className="flex flex-col sm:flex-row lg:items-center mt-12 lg:mt-0">
                         <div className="relative">
-                            <input 
-                                className={`border lg:ml-10 outline-none xl:ml-[166px] border-[#666F8B] h-[52px] w-full sm:w-[345px] lg:w-[378px] rounded-full px-6 placeholder:text-[#666F8B] ${status === "error" ? "border-red-500" : ""}`} 
-                                placeholder="Please enter your e-mail adress" 
-                                type="email" 
+                            <input
+                                className={`border lg:ml-10 outline-none xl:ml-[166px] border-[#666F8B] h-[52px] w-full sm:w-[345px] lg:w-[378px] rounded-full px-6 placeholder:text-[#666F8B] ${status === "error" ? "border-red-500" : ""}`}
+                                placeholder="Please enter your e-mail adress"
+                                type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 disabled={status === "loading"}
@@ -86,7 +86,7 @@ const ComingSoon = () => {
                             )}
                         </div>
 
-                        <button 
+                        <button
                             onClick={handleNotifyMe}
                             disabled={status === "loading"}
                             className="block mt-6 sm:mt-0 sm:ml-2.5 text-white font-medium bg-[#7B61FF] w-full sm:w-[142px] h-[52px] rounded-[40px] disabled:opacity-50"
