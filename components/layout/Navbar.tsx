@@ -26,7 +26,7 @@ const Navbar = () => {
     }
 
     return (
-        <div className="p-6 md:px-12 md:py-8 flex justify-between">
+        <nav className="p-6 md:px-12 md:py-8 flex justify-between">
             <BlackLogo />
             <div className="flex items-center">
                 <div className="hidden xl:flex pr-6 items-center">
@@ -72,7 +72,7 @@ const Navbar = () => {
                 </div>
                 <LoginBtn />
             </div>
-        </div>
+        </nav>
     )
 }
 

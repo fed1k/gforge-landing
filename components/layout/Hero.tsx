@@ -40,14 +40,14 @@ const Hero = () => {
             <p className="text-white text-[10px] md:text-base text-center pb-8 md:pb-12 pt-6 md:pt-8">Hire top talent for websites, apps, and more via AI</p>
 
             <div className="flex gap-3 md:gap-4 justify-center">
-                <a className="flex items-center md:w-47 gap-1.5 md:gap-3 text-white bg-[#0E0636] rounded-full py-2 pl-2 pr-3 md:py-2.5 md:pl-3 md:pr-[15px]">
+                <a href="https://app.giftedforge.com/login" className="flex items-center md:w-47 gap-1.5 md:gap-3 text-white bg-[#0E0636] rounded-full py-2 pl-2 pr-3 md:py-2.5 md:pl-3 md:pr-[15px]">
                     <div className="w-7 h-7 md:w-10 md:h-10 bg-white  flex items-center justify-center rounded-full">
 
                         <img className="w-4 h-4 md:w-6 md:h-6" src="/lastarrow.svg" alt="" />
                     </div>
                     <p className="font-semibold text-xs md:text-base">Find a Talent</p>
                 </a>
-                <a className="text-xs bg-white font-medium p-3.5 md:px-[27px] md:w-47 md:py-[18px] md:text-base rounded-full text-[#0E0636]">Explore Projects</a>
+                <a href="https://app.giftedforge.com/login" className="text-xs bg-white font-medium p-3.5 md:px-[27px] md:w-47 md:py-[18px] md:text-base rounded-full text-[#0E0636]">Explore Projects</a>
             </div>
 
             <p className="pt-32 pb-8 sm:pb-12 text-center text-sm md:text-base font-medium text-[#0E0636]">Trusted by</p>

@@ -48,14 +48,14 @@ const Trust = () => {
                         />
                     ))}
 
-                    {!showAll && (
-                        <button
-                            onClick={() => setShowAll(true)}
-                            className="border mt-6 border-white text-white mx-auto px-4 py-2 font-medium rounded-full md:hidden"
-                        >
-                            Load More
-                        </button>
-                    )}
+
+                    <button
+                        onClick={() => setShowAll((prev) => !prev)}
+                        className="border mt-6 border-white text-white mx-auto px-4 py-2 font-medium rounded-full md:hidden"
+                    >
+                        {showAll ? "Less" : "Load More"}
+                    </button>
+
                 </div>
             </section>
         </>

@@ -72,7 +72,7 @@ const LoginBtn = () => {
                 <a
                     className={`relative z-10 font-medium text-xs md:text-base py-2.5 md:py-3 px-3 md:px-4 rounded-full transition-colors duration-300 ${isOpen ? "text-[#0E0636]" : "text-white"
                         }`}
-                    href="/"
+                    href="https://app.giftedforge.com/role"
                 >
                     Login
                 </a>

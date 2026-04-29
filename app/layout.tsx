@@ -51,9 +51,9 @@ export default function RootLayout({
         <body
           className={`${montserrat.variable} ${montserrat.className}`}
         >
-          <Navbar />
+          {/* <Navbar /> */}
           {children}
-          <Footer />
+          {/* <Footer /> */}
         </body>
       </html>
     </ViewTransitions>

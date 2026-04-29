@@ -1,3 +1,4 @@
+import ComingSoon from "@/components/layout/ComingSoon";
 import Demand from "@/components/layout/Demand";
 import Footer from "@/components/layout/Footer";
 import Hero from "@/components/layout/Hero";
@@ -13,13 +14,15 @@ export default function Home() {
   return (
     <>
       
-      <Hero />
+      {/* <Hero />
       <Mission />
       <Trust />
       <Demand />
       <Process />
       <Stories />
-      <Reviews />
+      <Reviews /> */}
+
+      <ComingSoon />
       
     </>
   );
