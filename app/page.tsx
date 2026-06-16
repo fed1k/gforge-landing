@@ -14,15 +14,15 @@ export default function Home() {
   return (
     <>
       
-      {/* <Hero />
+      <Hero />
       <Mission />
       <Trust />
       <Demand />
       <Process />
       <Stories />
-      <Reviews /> */}
+      <Reviews />
 
-      <ComingSoon />
+      {/* <ComingSoon /> */}
       
     </>
   );
