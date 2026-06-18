@@ -1,3 +1,4 @@
+import AboutChoose from "@/components/layout/AboutChoose";
 import AboutFaq from "@/components/layout/AboutFAQ"
 import AboutTeam from "@/components/layout/AboutTeam"
 import AboutTrust from "@/components/layout/AboutTrust"
@@ -22,6 +23,7 @@ const About = () => {
         <div>
             <HeroOthers />
             <AboutTrust />
+            <AboutChoose />
             <AboutTeam />
             <AboutFaq />
         </div>

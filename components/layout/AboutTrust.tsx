@@ -1,221 +1,164 @@
 "use client";
 
-import { GoArrowLeft, GoArrowRight } from "react-icons/go";
-import AboutTrustCard from "../ui/AboutTrustCard";
-import { useRef, useState, useEffect } from "react";
+import { useState } from "react";
+import { FiChevronUp, FiChevronDown } from "react-icons/fi";
+
+type AccordionItem = {
+    title: string;
+    subtitle?: string;
+    description: string | string[];
+};
+
+const platformsData: { label: string; buttonLabel: string; items: AccordionItem[], buttonLink: string }[] = [
+    {
+        label: "Platform 01",
+        buttonLabel: "Explore Freelance Platform",
+        buttonLink: "https://app.giftedforge.com",
+        items: [
+            {
+                title: "01 - GiftedForge Freelance Marketplace",
+                subtitle: "The Smarter Way to Work Together",
+                description:
+                    "A modern freelance marketplace where talented professionals and businesses connect, collaborate, and complete projects with confidence.",
+            },
+            {
+                title: "02 - What You Can Do",
+                subtitle: "",
+                description: [
+                    "Find quality projects",
+                    "Hire skilled professionals",
+                    "Secure payments with escrow protection",
+                    "Receive faster payouts",
+                    "Get AI-powered project recommendations"
+                ],
+            }
+        ],
+    },
+    {
+        label: "Platform 02",
+        buttonLabel: "Explore NFT Platform",
+        buttonLink: "https://t.me/Giftedforge",
+        items: [
+            {
+                title: "01 - GiftedForge Creator Hub",
+                subtitle: "Where Creators Thrive",
+                description:
+                    "A dedicated space for creators and digital entrepreneurs to showcase their work, grow their audience, and monetize their skills.",
+            },
+            {
+                title: "02 - What You Can Do",
+                // subtitle: "Better Together",
+                description: [
+                    "Create NFTs",
+                    "Connect your wallet",
+                    "Build your digital profile",
+                    "Explore digital collections",
+                    "Participate in community experiences"
+                ],
+            },
+            {
+                title: "03 - Getting Started",
+                // subtitle: "Everything You Need",
+                description: [
+                    "Open Telegram",
+                    "Connect your wallet",
+                    "Create Your Profile",
+                    "Start Exploring"
+                ],
+            },
+        ],
+    },
+];
 
 const AboutTrust = () => {
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
-    const [activeIndex, setActiveIndex] = useState(NaN);
-    const [activeMobileButton, setActiveMobileButton] = useState("")
-    const totalSlides = 4;
+    const [activePlatform, setActivePlatform] = useState(0);
+    const [openItems, setOpenItems] = useState<Set<number>>(new Set([0]));
 
-    useEffect(() => {
+    const currentPlatform = platformsData[activePlatform];
+    const items = currentPlatform.items;
+    const allOpen = items.every((_, i) => openItems.has(i));
 
-        let timeout = setTimeout(() => {
-            setActiveIndex(0)
-        }, 100)
-
-        const interval = setInterval(() => {
-            setActiveIndex((prev) => (prev + 1) % totalSlides);
-        }, 10000); // 10 seconds
-
-        return () => {
-            clearTimeout(timeout)
-            clearInterval(interval)
-        };
-    }, []);
-
-    useEffect(() => {
-        const el = scrollContainerRef.current;
-        if (!el) return;
-
-        const slide = el.children[activeIndex] as HTMLElement;
-        if (!slide) return;
-
-        const containerPadding = parseInt(window.getComputedStyle(el).paddingLeft || "0");
-        
-        el.scrollTo({
-            left: slide.offsetLeft - containerPadding,
-            behavior: "smooth",
+    const toggleItem = (i: number) => {
+        setOpenItems((prev) => {
+            const next = new Set(prev);
+            next.has(i) ? next.delete(i) : next.add(i);
+            return next;
         });
-    }, [activeIndex]);
-
-    const scroll = (direction: "left" | "right") => {
-        setActiveMobileButton(direction)
-        if (direction === "left") {
-            setActiveIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
-        } else {
-            setActiveIndex((prev) => (prev + 1) % totalSlides);
-        }
     };
 
     return (
-        <section className="mt-17 md:mt-37 md:mb-37">
-            <h2 className="px-6 md:px-12 text-[#0E0636] text-2xl md:text-5xl leading-11 md:leading-15 font-semibold">
-                Why{" "}
-                <img
-                    className="w-9.5 h-9.5 md:h-14.5 md:w-14.5 inline"
-                    src="/arrowright.svg"
-                    alt=""
-                />{" "}
-                Thousands <br /> Trust GiftedForge
-            </h2>
+        <>
 
-            <div className="px-6 md:px-12 flex items-center justify-between">
-                <p className="text-[#0E0636] pt-2 mb-12 md:mb-25 text-[10px] md:text-xl">
-                    Where Talent, Technology, and Trust Meet.
-                </p>
-
-                <div className="hidden md:flex items-center gap-6 mb-25">
-                    <button
-                        onClick={() => scroll("left")}
-                        className="w-11 h-11 rounded-full border border-[#0E0636] 
-                        flex items-center justify-center 
-                        hover:bg-[#0E0636] hover:text-white  cursor-pointer
-                        transition-colors"
-                        aria-label="Previous projects"
-                    >
-                        <GoArrowLeft className="w-6 h-6" />
-                    </button>
-
-                    <button
-                        onClick={() => scroll("right")}
-                        className="w-12 h-12 rounded-full border border-[#0E0636] 
-                        flex items-center justify-center cursor-pointer
-                        hover:bg-[#0E0636] hover:text-white 
-                        transition-colors"
-                        aria-label="Next projects"
-                    >
-                        <GoArrowRight className="w-6 h-6" />
-                    </button>
-                </div>
-            </div>
-
-            {/* Scroll Container */}
-            <div
-                ref={scrollContainerRef}
-                className="flex gap-6 overflow-x-auto px-6 md:px-12 
-                scrollbar-hide scroll-smooth 
-                snap-x snap-mandatory
-                md:[&::-webkit-scrollbar]:hidden 
-                md:[-ms-overflow-style:none] 
-                md:[scrollbar-width:none]"
-            >
-                {/* Slide 1 */}
-                <div className="shrink-0 snap-end mt-4 flex flex-col gap-4 
-                    md:flex-row md:gap-6
-                    md:min-w-[clamp(800px,85vw,1100px)]"
-                >
-                    <AboutTrustCard
-                        isActive={activeIndex === 0}
-                        title="Our Mission"
-                        text="We provide a safe, reliable space for freelancers and clients to collaborate confidently and complete projects smoothly."
-                    />
-                    <img
-                        src="/teampc.png"
-                        className="w-[345px] h-[231px]
-                        sm:w-[420px] sm:h-[280px]
-                        md:w-[clamp(500px,60vw,722px)]
-                        md:h-[clamp(340px,40vw,483px)]
-                        rounded-4xl md:rounded-[48px]"
-                        alt=""
-                    />
+            <h2 className="pl-6 text-2xl lg:text-[40px] lg:pl-12 font-semibold text-[#0E0636 pt-17">Choose <img src="/arrow-right-illus.svg" className="w-9.5 h-9.5 inline lg:w-12 lg:h-12" alt="Illustration" /> Your <br />Experience</h2>
+            <section className="mt-12 md:mt-25 flex flex-col lg:flex-row justify-between mb-17 md:mb-37 px-6 md:px-12">
+                {/* Platform tabs */}
+                <div className="flex flex-col items-start gap-3 mb-8 md:mb-10">
+                    {platformsData.map((p, i) => (
+                        <button
+                            key={i}
+                            onClick={() => { setActivePlatform(i); setOpenItems(new Set([0])); }}
+                            className={`transition-colors cursor-pointer ${activePlatform === i ? "text-[#6B6AFD] text-lg lg:text-2xl" : "text-[#666F8BCC] text-[15px] lg:text-xl"
+                                }`}
+                        >
+                            {p.label}
+                        </button>
+                    ))}
                 </div>
 
-                {/* Slide 2 */}
-                <div className="shrink-0 snap-start mt-4 flex flex-col gap-4 
-                    md:flex-row md:gap-6 
-                    md:min-w-[clamp(800px,85vw,1100px)]"
-                >
-                    <AboutTrustCard
-                        isActive={activeIndex === 1}
-                        title="Our Values"
-                        text={<>Transparency, innovation, and care <br className="hidden md:inline" /> guide everything we do, creating an open, supportive, and valued <br className="inline md:hidden" /> experience for all users.</>}
-                    />
-                    <img
-                        src="/innovations.png"
-                        className="w-[345px] h-[231px]
-                        sm:w-[420px] sm:h-[280px]
-                        md:w-[clamp(500px,60vw,722px)]
-                        md:h-[clamp(340px,40vw,483px)]
-                        rounded-4xl md:rounded-[48px]"
-                        alt=""
-                    />
+                {/* Accordion */}
+                <div className="flex-[0.72]">
+                    {items.map((item, i) => {
+                        const isOpen = openItems.has(i);
+                        return (
+                            <div key={i} className="">
+                                <div className={`border-b rounded-xl mb-8 ${isOpen ? "bg-[#6B6AFD0D]  border-transparent  py-5 px-4 lg:p-6 " : "py-5 px-4 border-[#666F8B33]"}`}>
+                                    <button
+                                        onClick={() => toggleItem(i)}
+                                        className="w-full flex items-start justify-between text-left gap-4"
+                                    >
+                                        <span className=" text-lg lg:text-2xl text-[#0E0636] leading-tight">
+                                            {item.title}
+                                        </span>
+                                        {isOpen ? (
+                                            <FiChevronUp className="w-6 h-6 text-[#6B6AFD] shrink-0 mt-0.5" />
+                                        ) : (
+                                            <FiChevronDown className="w-6 h-6 text-[#0E063660] shrink-0 mt-0.5" />
+                                        )}
+                                    </button>
+                                    {isOpen && (
+                                        <div className="pt-8">
+                                            {item.subtitle && (
+                                                <p className="text-sm md:text-base font-light text-[#0E0636] mb-4">
+                                                    {item.subtitle}
+                                                </p>
+                                            )}
+                                            {Array.isArray(item.description) ? (
+                                                <ul className="list-disc list-inside space-y-2">
+                                                    {item.description.map((point, j) => (
+                                                        <li key={j} className="text-sm md:text-base font-light text-[#0E0636] leading-[148%]">
+                                                            {point}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            ) : (
+                                                <p className="text-sm md:text-base font-light text-[#0E0636] leading-[148%] max-w-150">
+                                                    {item.description}
+                                                </p>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        );
+                    })}
+                    {allOpen && (
+                        <a target="_blank" href={currentPlatform.buttonLink} className="mt-8 px-6 py-3 rounded-full bg-transparent text-[#6B6AFD] border border-[#6B6AFD] font-semibold text-sm md:text-base cursor-pointer hover:opacity-90 transition-opacity">
+                            {currentPlatform.buttonLabel}
+                        </a>
+                    )}
                 </div>
-
-                {/* Slide 3 */}
-                <div className="shrink-0 snap-start mt-4 flex flex-col gap-4 
-                    md:flex-row md:gap-6 
-                    md:min-w-[clamp(800px,85vw,1100px)]"
-                >
-                    <AboutTrustCard
-                        isActive={activeIndex === 2}
-                        title="Our Technology"
-                        text={<>GiftedForge uses AI, secure blockchain escrow, and modern UI/UX to deliver <br /> a smarter, safer, and smoother experience.</>}
-                    />
-                    <img
-                        src="/technology.png"
-                        className="w-[345px] h-[231px]
-                        sm:w-[420px] sm:h-[280px]
-                        md:w-[clamp(500px,60vw,722px)]
-                        md:h-[clamp(340px,40vw,483px)]
-                        rounded-4xl md:rounded-[48px]"
-                        alt=""
-                    />
-                </div>
-
-                {/* Slide 4 */}
-                <div className="shrink-0 snap-start mt-4 flex flex-col gap-4 
-                    md:flex-row md:gap-6 
-                    md:min-w-[clamp(800px,85vw,1100px)]"
-                >
-                    <AboutTrustCard
-                        isActive={activeIndex === 3}
-                        title="Why GiftedForge"
-                        text={<>We don’t just connect people—we <br /> build trust, helping freelancers grow <br /> and clients achieve results with confidence.</>}
-                    />
-                    <img
-                        src="/groupy.png"
-                        className="w-[345px] h-[231px]
-                        sm:w-[420px] sm:h-[280px]
-                        md:w-[clamp(500px,60vw,722px)]
-                        md:h-[clamp(340px,40vw,483px)]
-                        rounded-4xl md:rounded-[48px]"
-                        alt=""
-                    />
-                </div>
-            </div>
-
-            {/* Mobile Arrows */}
-            <div className="flex items-center ml-6 mt-12 md:hidden gap-4 mb-17">
-                <button
-                    onClick={() => scroll("left")}
-                    className={`w-8.5 h-8.5 rounded-full border border-[#0E0636] 
-                    flex items-center justify-center
-                    ${activeMobileButton === "left" && "text-white bg-[#0E0636]"}
-                    focus:bg-[#0E0636] focus:text-white
-                    active:bg-[#0E0636] active:text-white 
-                    transition-colors`}
-                    aria-label="Previous projects"
-                >
-                    <GoArrowLeft className="w-6 h-6" />
-                </button>
-
-                <button
-                    onClick={() => scroll("right")}
-                    className={`w-9.5 h-9.5 rounded-full border border-[#0E0636] 
-                    flex items-center justify-center
-                    focus:bg-[#0E0636] focus:text-white
-                    active:bg-[#0E0636] active:text-white 
-                     ${activeMobileButton === "right" && "text-white bg-[#0E0636]"}
-                    transition-colors`}
-                    aria-label="Next projects"
-                >
-                    <GoArrowRight className="w-6 h-6" />
-                </button>
-            </div>
-        </section>
+            </section>
+        </>
     );
 };
 

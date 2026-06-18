@@ -226,3 +226,7 @@
     z-index: 1;
     animation: none !important;
 }
+
+li::marker {
+    background-color: #666F8B66;
+}
