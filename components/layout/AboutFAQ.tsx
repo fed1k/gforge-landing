@@ -43,81 +43,94 @@ const questionsNext = [
 const AboutFaq = () => {
     return (
         <div>
-            <h2 className="px-6 md:px-12 text-[#0E0636] text-2xl md:text-5xl leading-11 md:leading-15 font-semibold">Frequently <img className="w-9.5 h-9.5 md:h-12 md:w-12 inline" src="/crown.svg" alt="" /> Asked <br /> Questions</h2>
-            <p className="px-6 md:px-12 text-[#0E0636] pt-4 lg:pt-6 mb-12 md:mb-25 text-[10px] lg:text-xl">Common GiftedForge questions—answered fast.</p>
-
-            <div className="overflow-hidden">
-                <div className="flex gap-[23px] animate-scroll-right w-max">
-                    {
-                        questions.map((question, index) => (
-                            <div key={`q1-${index}`} className="shrink-0 w-[432px]">
-                                <FaqCard question={question.question} answer={question.answer} />
-                            </div>
-                        ))
-                    }
-                    {/* Duplicate for seamless loop */}
-                    {
-                        questions.map((question, index) => (
-                            <div key={`q1-dup-${index}`} className="shrink-0 w-[432px]">
-                                <FaqCard question={question.question} answer={question.answer} />
-                            </div>
-                        ))
-                    }
-                </div>
-            </div>
-
-            <div className="pt-6 overflow-hidden pb-12 lg:pb-25">
-                <div className="flex gap-[23px] animate-scroll w-max">
-                    {
-                        [...questionsNext, ...questionsNext, ...questionsNext].map((question, index) => (
-                            <div key={`q2-${index}`} className="shrink-0 w-[657px] ">
-                                <FaqCard isLong={true} question={question.question} answer={question.answer} />
-                            </div>
-                        ))
-                    }
-                    {/* Duplicate for seamless loop */}
-                    {
-                        [...questionsNext, ...questionsNext, ...questionsNext].map((question, index) => (
-                            <div key={`q2-dup-${index}`} className="shrink-0 w-[657px]">
-                                <FaqCard isLong={true} question={question.question} answer={question.answer} />
-                            </div>
-                        ))
-                    }
-                </div>
-            </div>
-
-            <div className="bg-[#6B6AFD] rounded-3xl mx-3 mb-17 lg:mb-25 lg:mx-12 p-6 flex flex-col lg:flex-row lg:justify-between items-center">
-                <div className="flex flex-col lg:flex-row lg:items-center lg:gap-4">
-                    <div className="flex justify-center translate-x-1.5">
-                        {/* three images */}
-                        <img className="w-17.25 h-17.25 object-cover rounded-full border border-white" src="/firdavs.jpg" alt="" />
-                        <img className="w-17.25 -translate-x-2 h-17.25 object-cover rounded-full border border-white" src="/ceo.jpg" alt="" />
-                        <img className="w-17.25 -translate-x-4 h-17.25 object-cover object-[center_65%] rounded-full border border-white" src="/muhammad.jpg" alt="" />
-                    </div>
-
-                    <div className="text-white lg:text-start text-center">
-                        <h3 className="pt-6 pb-2 lg:p-0 text-xl font-medium">Still have questions?</h3>
-                        <p className="lg:whitespace-nowrap lg:pt-2">Can’t find the answer you’re looking <br className="lg:hidden" />  for? Please chat to our friendly team.</p>
+            <div className="bg-[#0E0636] relative mx-3 rounded-3xl lg:mx-6">
+                <div className="absolute w-full h-px bg-[#DAD8FF33] top-20 "></div>
+                <div className="absolute h-[286px] lg:h-[538px] w-px bg-[#DAD8FF33] left-[81px] lg:left-[251px] top-0"></div>
+                <div className="absolute h-[286px] lg:h-[538px] w-px bg-[#DAD8FF33] right-[150px] top-0"></div>
+                <div className="absolute h-[286px] lg:h-[538px] w-px bg-[#DAD8FF33] right-[50px] top-0"></div>
+                <p className="text-white text-sm font-medium lg:text-xl pl-5 pt-12 hidden lg:block">Frequently Asked Question’s</p>
+                <p className="text-white text-sm font-medium lg:text-xl pl-5 pt-12 lg:hidden">FAQ's</p>
+                <div className="overflow-hidden mt-[219px]">
+                    <div className="flex gap-[23px] animate-scroll-right w-max">
+                        {
+                            questions.map((question, index) => (
+                                <div key={`q1-${index}`} className="shrink-0 w-[432px]">
+                                    <FaqCard question={question.question} answer={question.answer} />
+                                </div>
+                            ))
+                        }
+                        {/* Duplicate for seamless loop */}
+                        {
+                            questions.map((question, index) => (
+                                <div key={`q1-dup-${index}`} className="shrink-0 w-[432px]">
+                                    <FaqCard question={question.question} answer={question.answer} />
+                                </div>
+                            ))
+                        }
                     </div>
                 </div>
 
-                <button 
-                    onClick={(e) => e.currentTarget.focus()}
-                    className="mt-8 lg:mt-0 text-[#6B6AFD] bg-white focus:bg-[#0E0636] focus:text-white focus:outline-none hover:bg-[#0E0636] hover:text-white active:bg-[#0E0636] active:text-white transition-all duration-300 cursor-pointer rounded-full w-[159px] h-[46px] font-semibold"
-                >
-                    Get in Touch
-                </button>
-            </div>
+                <div className="pt-6 overflow-hidden pb-12 lg:pb-25">
+                    <div className="flex gap-[23px] animate-scroll w-max">
+                        {
+                            [...questionsNext, ...questionsNext, ...questionsNext].map((question, index) => (
+                                <div key={`q2-${index}`} className="shrink-0 w-[657px] ">
+                                    <FaqCard isLong={true} question={question.question} answer={question.answer} />
+                                </div>
+                            ))
+                        }
+                        {/* Duplicate for seamless loop */}
+                        {
+                            [...questionsNext, ...questionsNext, ...questionsNext].map((question, index) => (
+                                <div key={`q2-dup-${index}`} className="shrink-0 w-[657px]">
+                                    <FaqCard isLong={true} question={question.question} answer={question.answer} />
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
 
-                    {/*  */}
-            <div className="bg-[#6B6AFD1A] rounded-3xl mx-3 mb-12 lg:mb-25 lg:mx-12 px-6 py-8 lg:py-12 flex flex-col items-center">
-                <h3 className="text-2xl text-[#0E0636] font-semibold lg:font-bold lg:text-[32px]">Ready to get started?</h3>
-                <p className="leading-7 text-[#0E0636] pt-6 lg:text-xl lg:leading-8 pb-8 w-[321px] lg:w-[856px] text-center">Join the platform of the future today and unlock smarter opportunities, <br className="lg:hidden" /> faster growth, <br className="hidden lg:inline" /> and a seamless experience designed to help you succeed from day one.</p>
-                <button 
+                <div className="  mx-3 mb-17 lg:mb-25 lg:mx-12 p-6 flex flex-col items-start pb-12">
+                    <div className="flex flex-col items-start lg:gap-4">
+                        <div className="flex justify-center translate-x-1.5">
+                            {/* three images */}
+                            <img className="w-12 h-12 object-cover rounded-full border border-white" src="/firdavs.jpg" alt="" />
+                            <img className="w-12 -translate-x-2 h-12 object-cover rounded-full border border-white" src="/ceo.jpg" alt="" />
+                            <img className="w-12 -translate-x-4 h-12 object-cover object-[center_65%] rounded-full border border-white" src="/muhammad.jpg" alt="" />
+                        </div>
+
+                        <div className="text-white lg:text-start text-start">
+                            <h3 className="pt-8 pb-2 lg:p-0  font-medium">Still have questions?</h3>
+                            <p className="pt-4 text-sm font-light">Can’t find the answer you’re looking <br className="lg:hidden" />  for? Please chat to our friendly team.</p>
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={(e) => e.currentTarget.focus()}
+                        className="mt-12 border-b border-white pb-1 flex items-center gap-1 text-white focus:outline-none  transition-all duration-300 cursor-pointer"
+                    >
+                        Get in Touch
+                        <img src="/arrow-right-stick.svg" className="w-4 h-4" alt="" />
+                    </button>
+                </div>
+
+            </div>
+            {/*  */}
+            <div className="bg-[#6B6AFD0D] rounded-3xl mx-3 mb-12 lg:mb-25 lg:mx-12 px-6 py-8 lg:py-12 flex flex-col items-center">
+                <h3 className="text-xl text-[#0E0636] font-medium">Ready to get started?</h3>
+                <p className="leading-7 text-[#666F8B] pt-6 lg:text-xl lg:leading-8 pb-8 w-[321px] lg:w-[856px] text-center">Join thousands of users already discovering new opportunities to work, create, and connect through GiftedForge. Whether you're looking to grow your skills, find meaningful projects, or build your digital presence, GiftedForge gives you the tools and space to turn ideas into real opportunities.</p>
+                
+                <button
                     onClick={(e) => e.currentTarget.focus()}
-                    className="text-sm font-semibold lg:text-base text-white rounded-full h-[46px] w-[159px] lg:w-[173px] lg:h-[49px] bg-[#6B6AFD] hover:shadow-[0px_4px_24px_0px_#00000029] focus:shadow-[0px_4px_24px_0px_#00000029] focus:outline-none active:shadow-[0px_4px_24px_0px_#00000029] transition-all duration-300 cursor-pointer"
+                    className="text-sm border border-[#6B6AFD] font-semibold lg:text-base text-[#6B6AFD] rounded-full h-[46px] w-[159px] lg:w-[173px] lg:h-[49px] hover:shadow-[0px_4px_24px_0px_#00000029] focus:shadow-[0px_4px_24px_0px_#00000029] focus:outline-none active:shadow-[0px_4px_24px_0px_#00000029] transition-all duration-300 cursor-pointer"
                 >
                     Sign Up Now
+                </button>
+                <button
+                    onClick={(e) => e.currentTarget.focus()}
+                    className="text-sm mt-4 font-semibold lg:text-base text-white rounded-full h-[46px] w-[159px] lg:w-[173px] lg:h-[49px] bg-[#6B6AFD] hover:shadow-[0px_4px_24px_0px_#00000029] focus:shadow-[0px_4px_24px_0px_#00000029] focus:outline-none active:shadow-[0px_4px_24px_0px_#00000029] transition-all duration-300 cursor-pointer"
+                >
+                    Join Community
                 </button>
             </div>
         </div>
