@@ -44,11 +44,11 @@ const AboutFaq = () => {
     return (
         <div>
             <div className="bg-[#0E0636] relative mx-3 rounded-3xl lg:mx-6">
-                <div className="absolute w-full h-px bg-[#DAD8FF33] top-20 "></div>
-                <div className="absolute h-[286px] lg:h-[538px] w-px bg-[#DAD8FF33] left-[81px] lg:left-[251px] top-0"></div>
-                <div className="absolute h-[286px] lg:h-[538px] w-px bg-[#DAD8FF33] right-[150px] top-0"></div>
-                <div className="absolute h-[286px] lg:h-[538px] w-px bg-[#DAD8FF33] right-[50px] top-0"></div>
-                <p className="text-white text-sm font-medium lg:text-xl pl-5 pt-12 hidden lg:block">Frequently Asked Question’s</p>
+                <div className="absolute w-full h-px bg-[#DAD8FF33] top-20 lg:top-[142px]"></div>
+                <div className="absolute h-[286px] lg:h-[346px] w-px bg-[#DAD8FF33] left-[81px] lg:left-[380px] top-0"></div>
+                <div className="absolute h-[286px] lg:h-[346px] w-px bg-[#DAD8FF33] right-[150px] lg:right-[446px] top-0"></div>
+                <div className="absolute h-[286px] lg:h-[346px] w-px bg-[#DAD8FF33] right-[50px] lg:right-[92px] top-0"></div>
+                <p className="text-white text-sm font-medium lg:text-xl pl-5 pt-12 lg:pt-25 hidden lg:block lg:pl-10.5">Frequently Asked Question’s</p>
                 <p className="text-white text-sm font-medium lg:text-xl pl-5 pt-12 lg:hidden">FAQ's</p>
                 <div className="overflow-hidden mt-[219px]">
                     <div className="flex gap-[23px] animate-scroll-right w-max">
@@ -90,18 +90,18 @@ const AboutFaq = () => {
                     </div>
                 </div>
 
-                <div className="  mx-3 mb-17 lg:mb-25 lg:mx-12 p-6 flex flex-col items-start pb-12">
+                <div className="   mb-17 lg:mb-25 p-6 pl-5 lg:pl-10.5 flex flex-col items-start pb-12">
                     <div className="flex flex-col items-start lg:gap-4">
                         <div className="flex justify-center translate-x-1.5">
                             {/* three images */}
-                            <img className="w-12 h-12 object-cover rounded-full border border-white" src="/firdavs.jpg" alt="" />
-                            <img className="w-12 -translate-x-2 h-12 object-cover rounded-full border border-white" src="/ceo.jpg" alt="" />
-                            <img className="w-12 -translate-x-4 h-12 object-cover object-[center_65%] rounded-full border border-white" src="/muhammad.jpg" alt="" />
+                            <img className="w-12 h-12 lg:w-14.5 lg:h-14.5 object-cover rounded-full border border-white" src="/firdavs.jpg" alt="" />
+                            <img className="w-12 lg:w-14.5 lg:h-14.5 -translate-x-2 h-12 object-cover rounded-full border border-white" src="/ceo.jpg" alt="" />
+                            <img className="w-12 lg:w-14.5 lg:h-14.5 -translate-x-4 h-12 object-cover object-[center_65%] rounded-full border border-white" src="/muhammad.jpg" alt="" />
                         </div>
 
                         <div className="text-white lg:text-start text-start">
-                            <h3 className="pt-8 pb-2 lg:p-0  font-medium">Still have questions?</h3>
-                            <p className="pt-4 text-sm font-light">Can’t find the answer you’re looking <br className="lg:hidden" />  for? Please chat to our friendly team.</p>
+                            <h3 className="pt-8 pb-2 lg:p-0  font-medium lg:text-xl">Still have questions?</h3>
+                            <p className="pt-4 text-sm font-light lg:text-base">Can’t find the answer you’re looking <br className="lg:hidden" />  for? Please chat to our friendly team.</p>
                         </div>
                     </div>
 
