@@ -51,7 +51,7 @@ const AboutFaq = () => {
                 <p className="text-white text-sm font-medium lg:text-xl pl-5 pt-12 lg:pt-25 hidden lg:block lg:pl-10.5">Frequently Asked Question’s</p>
                 <p className="text-white text-sm font-medium lg:text-xl pl-5 pt-12 lg:hidden">FAQ's</p>
                 <div className="overflow-hidden mt-[219px]">
-                    <div className="flex gap-[23px] animate-scroll-right w-max">
+                    <div className="flex gap-[23px] animate-scroll-right w-max lg:pb-1">
                         {
                             questions.map((question, index) => (
                                 <div key={`q1-${index}`} className="shrink-0 w-[432px]">
