@@ -42,9 +42,15 @@ The root layout (`app/layout.tsx`) renders `<Navbar>` and `<Footer>` around all 
 
 `HeroOthers` in `components/layout/HeroOthers.tsx` is the shared hero banner used on all non-home pages; it accepts `title`, `subtext`, `subtextWidth`, and `isAbout` props. When `isAbout` is true (default) it renders floating stat widgets (1M+ projects, 4.8 rating, etc.).
 
+### Navigation and page transitions
+
+`NavLink` (`components/ui/NavLink.tsx`) wraps `next/link` and must be used for all internal navigation — it hooks into `useTransitionRouter` from `next-view-transitions` to trigger the vertical slide page animation. Plain `<Link>` bypasses the transition. The active route is highlighted with `text-[#6B6AFD]` and a `border-[#6B6AFD]` underline.
+
+The transition animation itself (old page slides up, new page slides in from below) is defined inline in `NavLink`'s `pageAnimation` function. The CSS counterpart that makes this work is the `::view-transition-*` rules in `app/globals.css`.
+
 ### Server actions
 
-`app/actions.ts` contains `sendEmailToTelegram`, a Next.js server action that forwards a submitted email to a Telegram bot. It is used by the ComingSoon wishlist form (currently commented out in `app/page.tsx`).
+`app/actions.ts` contains `sendEmailToTelegram`, a Next.js server action that forwards a submitted email to a Telegram bot. The bot token and chat ID are **hardcoded** in this file (not in env vars) — the comment says it's used by the ComingSoon wishlist form, which is currently commented out in `app/page.tsx`. The `ContactForm` component's submit button is also currently non-functional (no handler wired up).
 
 ### Styling conventions
 
@@ -52,3 +58,9 @@ The root layout (`app/layout.tsx`) renders `<Navbar>` and `<Footer>` around all 
 - Custom animation utility classes are defined in `app/globals.css`: `animate-float`, `animate-sway`, `animate-drift`, `animate-pulse-glow`, `animate-float-slow`, `animate-float-reverse`, plus `animation-delay-{200..1200}` helpers.
 - Custom utilities also in `globals.css`: `bg-linear`, `custom-shadow`, `animate-scroll`, `animate-scroll-right`, `cardonic-1/2/3` (hover icon swap for Process section cards).
 - Path alias `@/*` resolves to the project root.
+
+### Known incomplete areas
+
+- `ContactForm`: the Submit button has no action; form state and submission logic are not implemented.
+- `Videos` (`components/layout/Videos.tsx`): all video thumbnails and metadata are hardcoded inline; placeholder video URLs point to a w3schools sample.
+- `ComingSoon` component and the `sendEmailToTelegram` server action exist but are commented out of `app/page.tsx`.

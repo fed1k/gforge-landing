@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import { ViewTransitions } from "next-view-transitions";
 
 const montserrat = Montserrat({
@@ -51,9 +49,7 @@ export default function RootLayout({
         <body
           className={`${montserrat.variable} ${montserrat.className}`}
         >
-          <Navbar />
           {children}
-          <Footer />
         </body>
       </html>
     </ViewTransitions>
