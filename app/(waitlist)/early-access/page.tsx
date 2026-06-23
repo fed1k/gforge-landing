@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { BsLayersFill } from "react-icons/bs"
 import { Outfit } from "next/font/google"
+import { saveEmail } from "@/lib/waitlist-storage"
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -18,6 +19,7 @@ export default function EarlyAccessPage() {
 
   const handleSubmit = () => {
     if (email.trim()) {
+      saveEmail(email.trim())
       router.push("/waitlist")
     }
   }

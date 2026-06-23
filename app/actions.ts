@@ -1,5 +1,101 @@
 "use server";
 
+const BACKEND_URL = process.env.GIFTEDFORGE_API_URL ?? "https://nft.giftedforge.com"
+const X_CLIENT_ID = "WU5aenlrejRqMzVRZGdPcURxQkw6MTpjaQ"
+const X_REDIRECT_URI = "https://giftedforge.com/waitlist/follow/callback"
+
+export async function validateActivationCode(
+  code: string,
+  email: string,
+): Promise<{ valid: boolean; reason?: string; referralCodes?: string[] }> {
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/waitlist/codes/validate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: code.trim().toUpperCase(), email: email.trim() }),
+      cache: "no-store",
+    })
+    if (!res.ok) return { valid: false, reason: "server_error" }
+    const data = await res.json()
+    return data as { valid: boolean; reason?: string; referralCodes?: string[] }
+  } catch {
+    return { valid: false, reason: "network_error" }
+  }
+}
+
+export async function verifyXFollow(
+  username: string,
+): Promise<{ follows: boolean; protected?: boolean; message?: string }> {
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/waitlist/verify/follow`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username }),
+      cache: "no-store",
+    })
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}))
+      return { follows: false, message: err.message ?? "Verification failed. Please try again." }
+    }
+    return await res.json()
+  } catch {
+    return { follows: false, message: "Connection failed. Check your internet and try again." }
+  }
+}
+
+export async function getWaitlistStats(
+  email: string,
+): Promise<{ invited: number; activated: number }> {
+  try {
+    const url = `${BACKEND_URL}/api/waitlist/stats?email=${encodeURIComponent(email)}`
+    const res = await fetch(url, { cache: "no-store" })
+    if (!res.ok) return { invited: 0, activated: 0 }
+    return await res.json()
+  } catch {
+    return { invited: 0, activated: 0 }
+  }
+}
+
+export async function exchangeXCode(
+  code: string,
+  codeVerifier: string,
+): Promise<{ username?: string; error?: string }> {
+  try {
+    const tokenRes = await fetch("https://api.twitter.com/2/oauth2/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        grant_type: "authorization_code",
+        code,
+        redirect_uri: X_REDIRECT_URI,
+        client_id: X_CLIENT_ID,
+        code_verifier: codeVerifier,
+      }).toString(),
+      cache: "no-store",
+    })
+
+    if (!tokenRes.ok) {
+      const err = await tokenRes.text()
+      console.error("[x-oauth] token exchange failed:", tokenRes.status, err)
+      return { error: "token_exchange_failed" }
+    }
+
+    const { access_token } = await tokenRes.json()
+
+    const userRes = await fetch("https://api.twitter.com/2/users/me", {
+      headers: { Authorization: `Bearer ${access_token}` },
+      cache: "no-store",
+    })
+
+    if (!userRes.ok) return { error: "user_fetch_failed" }
+
+    const { data } = await userRes.json()
+    return { username: data?.username }
+  } catch {
+    return { error: "network_error" }
+  }
+}
+
 export async function sendEmailToTelegram(email: string) {
   const token = "8749755157:AAGePFzvLAOEog5MzURG3wzakDTteVKRCSM";
   const chatId = -5226409806;
