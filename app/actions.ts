@@ -2,6 +2,7 @@
 
 const BACKEND_URL = process.env.GIFTEDFORGE_API_URL ?? "https://nft.giftedforge.com"
 const X_CLIENT_ID = "WU5aenlrejRqMzVRZGdPcURxQkw6MTpjaQ"
+const X_CLIENT_SECRET = "qHBLKPA8twv7rIFsyDO3YNBCTQPLd5RpWL9hEH_t7XhgujYpBr"
 const X_REDIRECT_URI = "https://giftedforge.com/waitlist/follow/callback"
 
 export async function validateActivationCode(
@@ -63,7 +64,7 @@ export async function exchangeXCode(
   try {
     // Twitter requires Basic auth header even for public PKCE clients.
     // Format: base64(client_id:) — empty secret for public clients.
-    const basicAuth = Buffer.from(`${X_CLIENT_ID}:`).toString("base64")
+    const basicAuth = Buffer.from(`${X_CLIENT_ID}:${X_CLIENT_SECRET}`).toString("base64")
 
     const tokenRes = await fetch("https://api.twitter.com/2/oauth2/token", {
       method: "POST",
