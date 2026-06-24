@@ -4,6 +4,8 @@ const BACKEND_URL = process.env.GIFTEDFORGE_API_URL ?? "https://nft.giftedforge.
 const X_CLIENT_ID = "WU5aenlrejRqMzVRZGdPcURxQkw6MTpjaQ"
 const X_CLIENT_SECRET = "qHBLKPA8twv7rIFsyDO3YNBCTQPLd5RpWL9hEH_t7XhgujYpBr"
 const X_REDIRECT_URI = "https://giftedforge.com/waitlist/follow/callback"
+const X_ENGAGE_REDIRECT_URI = "https://giftedforge.com/waitlist/engage/callback"
+const ENGAGE_TWEET_ID = "2057819752966316272"
 
 export async function validateActivationCode(
   code: string,
@@ -104,6 +106,66 @@ export async function exchangeXCode(
     return { username: data?.username }
   } catch {
     return { error: "network_error" }
+  }
+}
+
+export async function verifyXEngage(
+  code: string,
+  codeVerifier: string,
+): Promise<{ liked: boolean; username?: string; error?: string }> {
+  try {
+    const basicAuth = Buffer.from(`${X_CLIENT_ID}:${X_CLIENT_SECRET}`).toString("base64")
+
+    const tokenRes = await fetch("https://api.twitter.com/2/oauth2/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: `Basic ${basicAuth}`,
+      },
+      body: new URLSearchParams({
+        grant_type: "authorization_code",
+        code,
+        redirect_uri: X_ENGAGE_REDIRECT_URI,
+        code_verifier: codeVerifier,
+      }).toString(),
+      cache: "no-store",
+    })
+
+    if (!tokenRes.ok) {
+      console.error("[x-engage] token exchange failed:", tokenRes.status, await tokenRes.text())
+      return { liked: false, error: "token_exchange_failed" }
+    }
+
+    const { access_token } = await tokenRes.json()
+
+    const userRes = await fetch("https://api.twitter.com/2/users/me", {
+      headers: { Authorization: `Bearer ${access_token}` },
+      cache: "no-store",
+    })
+
+    if (!userRes.ok) {
+      console.error("[x-engage] users/me failed:", userRes.status, await userRes.text())
+      return { liked: false, error: "user_fetch_failed" }
+    }
+
+    const { data: user } = await userRes.json()
+
+    const likedRes = await fetch(
+      `https://api.twitter.com/2/users/${user.id}/liked_tweets?max_results=100`,
+      { headers: { Authorization: `Bearer ${access_token}` }, cache: "no-store" },
+    )
+
+    if (!likedRes.ok) {
+      console.error("[x-engage] liked_tweets failed:", likedRes.status, await likedRes.text())
+      return { liked: false, error: "like_check_failed" }
+    }
+
+    const likedData = await likedRes.json()
+    const liked = likedData.data?.some((t: { id: string }) => t.id === ENGAGE_TWEET_ID) ?? false
+
+    return { liked, username: user.username }
+  } catch {
+    return { liked: false, error: "network_error" }
   }
 }
 

@@ -38,6 +38,23 @@ export function getXUsername(): string {
   return localStorage.getItem(X_USERNAME_KEY) ?? ""
 }
 
+const ENGAGE_KEY = "gf_engage_clicked"
+export type EngageAction = "like" | "repost" | "comment"
+
+export function getEngageClicked(): Set<EngageAction> {
+  if (typeof window === "undefined") return new Set()
+  try {
+    const s = localStorage.getItem(ENGAGE_KEY)
+    return s ? new Set(JSON.parse(s) as EngageAction[]) : new Set()
+  } catch { return new Set() }
+}
+
+export function markEngageClicked(action: EngageAction): void {
+  const current = getEngageClicked()
+  current.add(action)
+  localStorage.setItem(ENGAGE_KEY, JSON.stringify([...current]))
+}
+
 const REFERRAL_CODES_KEY = "gf_referral_codes"
 
 export function saveReferralCodes(codes: string[]): void {
