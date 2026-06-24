@@ -94,7 +94,11 @@ export async function exchangeXCode(
       cache: "no-store",
     })
 
-    if (!userRes.ok) return { error: "user_fetch_failed" }
+    if (!userRes.ok) {
+      const body = await userRes.text()
+      console.error("[x-oauth] users/me failed:", userRes.status, body)
+      return { error: "user_fetch_failed" }
+    }
 
     const { data } = await userRes.json()
     return { username: data?.username }

@@ -45,7 +45,7 @@ export default function FollowPage() {
       response_type: "code",
       client_id: X_CLIENT_ID,
       redirect_uri: X_REDIRECT_URI,
-      scope: "users.read",
+      scope: "users.read tweet.read",
       state,
       code_challenge: challenge,
       code_challenge_method: "S256",
