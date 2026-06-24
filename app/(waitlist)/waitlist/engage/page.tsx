@@ -24,9 +24,12 @@ const TWEET_ID = "2057819752966316272"
 
 const ERROR_MESSAGES: Record<string, string> = {
   not_liked: "We couldn't verify your like. Please like the tweet and try again.",
+  like_unauthorized: "X didn't grant like-read permission. Re-connect your account and try again.",
+  like_forbidden: "X blocked access to your likes (API access level). Please contact support.",
+  like_rate_limited: "Too many requests — wait a minute and try again.",
+  like_check_failed: "Couldn't check your likes. Please try again.",
   token_exchange_failed: "Authorization failed. Please try again.",
   user_fetch_failed: "Couldn't fetch your X profile. Please try again.",
-  like_check_failed: "Couldn't check your likes. Please try again.",
   no_code: "Twitter didn't return an auth code. Please try again.",
   no_verifier: "Session expired — please try again.",
   state_mismatch: "Security check failed. Please try again.",
