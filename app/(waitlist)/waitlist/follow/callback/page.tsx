@@ -13,8 +13,8 @@ export default function XCallbackPage() {
     const code = params.get("code")
     const xError = params.get("error")
     const returnedState = params.get("state")
-    const verifier = sessionStorage.getItem("x_pkce_verifier")
-    const savedState = sessionStorage.getItem("x_oauth_state")
+    const verifier = localStorage.getItem("x_pkce_verifier")
+    const savedState = localStorage.getItem("x_oauth_state")
 
     // Twitter returned an error (e.g. user denied access)
     if (xError) {
@@ -36,8 +36,8 @@ export default function XCallbackPage() {
       return
     }
 
-    sessionStorage.removeItem("x_pkce_verifier")
-    sessionStorage.removeItem("x_oauth_state")
+    localStorage.removeItem("x_pkce_verifier")
+    localStorage.removeItem("x_oauth_state")
 
     exchangeXCode(code, verifier).then((result) => {
       if (result.username) {

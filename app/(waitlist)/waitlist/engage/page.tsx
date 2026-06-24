@@ -96,8 +96,8 @@ export default function EngagePage() {
     const challenge = await generateCodeChallenge(verifier)
     const state = generateState()
 
-    sessionStorage.setItem("x_engage_pkce_verifier", verifier)
-    sessionStorage.setItem("x_engage_oauth_state", state)
+    localStorage.setItem("x_engage_pkce_verifier", verifier)
+    localStorage.setItem("x_engage_oauth_state", state)
 
     const params = new URLSearchParams({
       response_type: "code",

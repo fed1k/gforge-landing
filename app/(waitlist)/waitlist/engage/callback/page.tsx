@@ -12,8 +12,8 @@ export default function EngageCallbackPage() {
     const code = params.get("code")
     const xError = params.get("error")
     const returnedState = params.get("state")
-    const verifier = sessionStorage.getItem("x_engage_pkce_verifier")
-    const savedState = sessionStorage.getItem("x_engage_oauth_state")
+    const verifier = localStorage.getItem("x_engage_pkce_verifier")
+    const savedState = localStorage.getItem("x_engage_oauth_state")
 
     if (xError) {
       router.replace(`/waitlist/engage?error=${xError}`)
@@ -32,8 +32,8 @@ export default function EngageCallbackPage() {
       return
     }
 
-    sessionStorage.removeItem("x_engage_pkce_verifier")
-    sessionStorage.removeItem("x_engage_oauth_state")
+    localStorage.removeItem("x_engage_pkce_verifier")
+    localStorage.removeItem("x_engage_oauth_state")
 
     verifyXEngage(code, verifier).then((result) => {
       if (result.liked) {

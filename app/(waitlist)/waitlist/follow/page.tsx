@@ -38,8 +38,8 @@ export default function FollowPage() {
     const challenge = await generateCodeChallenge(verifier)
     const state = generateState()
 
-    sessionStorage.setItem("x_pkce_verifier", verifier)
-    sessionStorage.setItem("x_oauth_state", state)
+    localStorage.setItem("x_pkce_verifier", verifier)
+    localStorage.setItem("x_oauth_state", state)
 
     const params = new URLSearchParams({
       response_type: "code",
