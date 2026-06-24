@@ -36,12 +36,17 @@ export default function EngageCallbackPage() {
     localStorage.removeItem("x_engage_oauth_state")
 
     verifyXEngage(code, verifier).then((result) => {
-      if (result.liked) {
-        router.replace("/waitlist/engage?verified=1")
+      const engaged = result.liked || result.userCommentedOnPost || result.userRetweetedOnPost
+      if (engaged) {
+        const p = new URLSearchParams({ verified: "1" })
+        if (result.liked) p.set("liked", "1")
+        if (result.userCommentedOnPost) p.set("commented", "1")
+        if (result.userRetweetedOnPost) p.set("retweeted", "1")
+        router.replace(`/waitlist/engage?${p}`)
       } else if (result.error) {
         router.replace(`/waitlist/engage?error=${result.error}`)
       } else {
-        router.replace("/waitlist/engage?error=not_liked")
+        router.replace("/waitlist/engage?error=not_engaged")
       }
     })
   }, [router])

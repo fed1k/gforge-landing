@@ -23,6 +23,7 @@ const X_ENGAGE_REDIRECT_URI = "https://giftedforge.com/waitlist/engage/callback"
 const TWEET_ID = "2057819752966316272"
 
 const ERROR_MESSAGES: Record<string, string> = {
+  not_engaged: "We couldn't verify any engagement. Please like, repost, or comment and try again.",
   not_liked: "We couldn't verify your like. Please like the tweet and try again.",
   like_unauthorized: "X didn't grant like-read permission. Re-connect your account and try again.",
   like_forbidden: "X blocked access to your likes (API access level). Please contact support.",
@@ -190,7 +191,7 @@ export default function EngagePage() {
       </button>
 
       <p className="text-center text-xs text-[#AAAACC] mt-4">
-        Your like is verified via X. Repost and comment are on your honor.
+        Like, repost, and comment are each verified via X.
       </p>
     </div>
   )

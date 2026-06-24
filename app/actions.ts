@@ -109,10 +109,58 @@ export async function exchangeXCode(
   }
 }
 
+async function fetchUserEngagement(
+  userId: string,
+  accessToken: string,
+  tweetId: string,
+): Promise<{ commented: boolean; retweeted: boolean }> {
+  let commented = false
+  let retweeted = false
+  let paginationToken: string | undefined
+
+  for (let page = 0; page < 5 && !(commented && retweeted); page++) {
+    const url = new URL(`https://api.twitter.com/2/users/${userId}/tweets`)
+    url.searchParams.set("max_results", "100")
+    url.searchParams.set("tweet.fields", "referenced_tweets")
+    if (paginationToken) url.searchParams.set("pagination_token", paginationToken)
+
+    const res = await fetch(url.toString(), {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      cache: "no-store",
+    })
+
+    if (!res.ok) break
+
+    const data = await res.json()
+
+    for (const tweet of data.data ?? []) {
+      for (const ref of (tweet.referenced_tweets ?? []) as Array<{ id: string; type: string }>) {
+        if (ref.id === tweetId) {
+          if (ref.type === "replied_to") commented = true
+          if (ref.type === "retweeted") retweeted = true
+        }
+      }
+    }
+
+    paginationToken = data.meta?.next_token
+    if (!paginationToken) break
+  }
+
+  return { commented, retweeted }
+}
+
 export async function verifyXEngage(
   code: string,
   codeVerifier: string,
-): Promise<{ liked: boolean; username?: string; error?: string }> {
+): Promise<{
+  liked: boolean
+  userCommentedOnPost: boolean
+  userRetweetedOnPost: boolean
+  username?: string
+  error?: string
+}> {
+  const none = { liked: false, userCommentedOnPost: false, userRetweetedOnPost: false }
+
   try {
     const basicAuth = Buffer.from(`${X_CLIENT_ID}:${X_CLIENT_SECRET}`).toString("base64")
 
@@ -133,7 +181,7 @@ export async function verifyXEngage(
 
     if (!tokenRes.ok) {
       console.error("[x-engage] token exchange failed:", tokenRes.status, await tokenRes.text())
-      return { liked: false, error: "token_exchange_failed" }
+      return { ...none, error: "token_exchange_failed" }
     }
 
     const { access_token } = await tokenRes.json()
@@ -145,31 +193,40 @@ export async function verifyXEngage(
 
     if (!userRes.ok) {
       console.error("[x-engage] users/me failed:", userRes.status, await userRes.text())
-      return { liked: false, error: "user_fetch_failed" }
+      return { ...none, error: "user_fetch_failed" }
     }
 
     const { data: user } = await userRes.json()
 
-    const likedRes = await fetch(
-      `https://api.twitter.com/2/users/${user.id}/liked_tweets?max_results=100`,
-      { headers: { Authorization: `Bearer ${access_token}` }, cache: "no-store" },
-    )
+    const [likedRes, engagement] = await Promise.all([
+      fetch(`https://api.twitter.com/2/users/${user.id}/liked_tweets?max_results=100`, {
+        headers: { Authorization: `Bearer ${access_token}` },
+        cache: "no-store",
+      }),
+      fetchUserEngagement(user.id, access_token, ENGAGE_TWEET_ID),
+    ])
 
     if (!likedRes.ok) {
       const errBody = await likedRes.text()
       console.error("[x-engage] liked_tweets failed:", likedRes.status, errBody)
-      if (likedRes.status === 401) return { liked: false, error: "like_unauthorized" }
-      if (likedRes.status === 403) return { liked: false, error: "like_forbidden" }
-      if (likedRes.status === 429) return { liked: false, error: "like_rate_limited" }
-      return { liked: false, error: `like_check_failed_${likedRes.status}` }
+      const partial = { ...none, userCommentedOnPost: engagement.commented, userRetweetedOnPost: engagement.retweeted }
+      if (likedRes.status === 401) return { ...partial, error: "like_unauthorized" }
+      if (likedRes.status === 403) return { ...partial, error: "like_forbidden" }
+      if (likedRes.status === 429) return { ...partial, error: "like_rate_limited" }
+      return { ...partial, error: `like_check_failed_${likedRes.status}` }
     }
 
     const likedData = await likedRes.json()
     const liked = likedData.data?.some((t: { id: string }) => t.id === ENGAGE_TWEET_ID) ?? false
 
-    return { liked, username: user.username }
+    return {
+      liked,
+      userCommentedOnPost: engagement.commented,
+      userRetweetedOnPost: engagement.retweeted,
+      username: user.username,
+    }
   } catch {
-    return { liked: false, error: "network_error" }
+    return { ...none, error: "network_error" }
   }
 }
 
