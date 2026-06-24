@@ -21,8 +21,15 @@ export default function FollowPage() {
     if (saved) setUsername(saved)
 
     const params = new URLSearchParams(window.location.search)
-    if (params.get("error") === "auth_failed") {
-      setError("Couldn't connect your X account. Please try again.")
+    const err = params.get("error")
+    if (err) {
+      const messages: Record<string, string> = {
+        no_code: "Twitter didn't return an auth code. Please try again.",
+        no_verifier: "Session expired — please try again from the same browser tab.",
+        state_mismatch: "Security check failed (state mismatch). Please try again.",
+        access_denied: "You cancelled the X authorization. Please try again.",
+      }
+      setError(messages[err] ?? `Auth error: ${err}. Please try again.`)
     }
   }, [])
 
