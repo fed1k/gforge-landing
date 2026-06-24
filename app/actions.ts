@@ -61,14 +61,20 @@ export async function exchangeXCode(
   codeVerifier: string,
 ): Promise<{ username?: string; error?: string }> {
   try {
+    // Twitter requires Basic auth header even for public PKCE clients.
+    // Format: base64(client_id:) — empty secret for public clients.
+    const basicAuth = Buffer.from(`${X_CLIENT_ID}:`).toString("base64")
+
     const tokenRes = await fetch("https://api.twitter.com/2/oauth2/token", {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": `Basic ${basicAuth}`,
+      },
       body: new URLSearchParams({
         grant_type: "authorization_code",
         code,
         redirect_uri: X_REDIRECT_URI,
-        client_id: X_CLIENT_ID,
         code_verifier: codeVerifier,
       }).toString(),
       cache: "no-store",
