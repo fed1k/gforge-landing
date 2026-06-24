@@ -161,7 +161,7 @@ export async function verifyXEngage(
       if (likedRes.status === 401) return { liked: false, error: "like_unauthorized" }
       if (likedRes.status === 403) return { liked: false, error: "like_forbidden" }
       if (likedRes.status === 429) return { liked: false, error: "like_rate_limited" }
-      return { liked: false, error: "like_check_failed" }
+      return { liked: false, error: `like_check_failed_${likedRes.status}` }
     }
 
     const likedData = await likedRes.json()
