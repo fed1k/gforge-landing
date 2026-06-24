@@ -107,6 +107,21 @@ export async function exchangeXCode(
   }
 }
 
+export async function checkTelegramVerification(
+  sessionId: string,
+): Promise<{ status: "pending" | "waiting" | "verified" }> {
+  try {
+    const res = await fetch(
+      `${BACKEND_URL}/api/waitlist/verify/telegram?session_id=${encodeURIComponent(sessionId)}`,
+      { cache: "no-store" },
+    )
+    if (!res.ok) return { status: "pending" }
+    return await res.json()
+  } catch {
+    return { status: "pending" }
+  }
+}
+
 export async function sendEmailToTelegram(email: string) {
   const token = "8749755157:AAGePFzvLAOEog5MzURG3wzakDTteVKRCSM";
   const chatId = -5226409806;
