@@ -1,4 +1,4 @@
-export type TaskKey = "follow-x" | "telegram" | "engage" | "wallet" | "share-friends"
+export type TaskKey = "follow-x" | "telegram" | "engage" | "share-friends"
 
 const TASKS_KEY = "gf_tasks"
 const EMAIL_KEY = "gf_email"

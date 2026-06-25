@@ -7,7 +7,6 @@ import {
   BsTwitterX,
   BsTelegram,
   BsArrowRepeat,
-  BsWallet2,
   BsPeopleFill,
   BsLockFill,
   BsChevronRight,
@@ -45,14 +44,6 @@ const tasks: {
     desc: "Interact now and be part of the momentum.",
     href: "/waitlist/engage",
     key: "engage",
-    required: true,
-  },
-  {
-    icon: BsWallet2,
-    title: "Create Wallet",
-    desc: "Set up your secure in-app wallet.",
-    href: "/waitlist/wallet",
-    key: "wallet",
     required: true,
   },
   {
