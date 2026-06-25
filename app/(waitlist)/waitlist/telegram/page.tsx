@@ -40,10 +40,11 @@ export default function TelegramPage() {
     authCompleted.current = false
 
     const origin = encodeURIComponent(window.location.origin)
+    const returnTo = encodeURIComponent(`${window.location.origin}/waitlist/telegram/callback`)
     const left = Math.round(window.screen.width / 2 - 275)
     const top = Math.round(window.screen.height / 2 - 235)
     const popup = window.open(
-      `https://oauth.telegram.org/auth?bot_id=${TG_BOT_ID}&origin=${origin}&embed=1`,
+      `https://oauth.telegram.org/auth?bot_id=${TG_BOT_ID}&origin=${origin}&embed=1&return_to=${returnTo}`,
       "telegram_login",
       `width=550,height=470,left=${left},top=${top}`,
     )
@@ -55,16 +56,21 @@ export default function TelegramPage() {
     }
 
     const handleMessage = async (event: MessageEvent) => {
-      if (event.origin !== "https://oauth.telegram.org") return
+      if (event.origin !== window.location.origin) return
+      const raw = event.data as Record<string, string> & { type?: string }
+      if (raw?.type !== "tg_auth" || !raw.hash) return
       authCompleted.current = true
       window.removeEventListener("message", handleMessage)
       popup.close()
 
-      const data = event.data as TelegramAuthData
-      if (!data?.hash) {
-        setError(ERROR_MESSAGES.invalid_hash)
-        setLoading(false)
-        return
+      const data: TelegramAuthData = {
+        id: Number(raw.id),
+        first_name: raw.first_name ?? "",
+        last_name: raw.last_name,
+        username: raw.username,
+        photo_url: raw.photo_url,
+        auth_date: Number(raw.auth_date),
+        hash: raw.hash,
       }
 
       const result = await verifyTelegramMembership(data)
