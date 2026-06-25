@@ -4,7 +4,6 @@ import { useEffect } from "react"
 
 export default function TelegramAuthCallbackPage() {
   useEffect(() => {
-    // Telegram redirects here with auth data as query params or hash fragment
     const fromQuery = new URLSearchParams(window.location.search)
     const fromHash = new URLSearchParams(window.location.hash.replace(/^#/, ""))
     const params = fromQuery.get("hash") ? fromQuery : fromHash
@@ -12,17 +11,15 @@ export default function TelegramAuthCallbackPage() {
     const id = params.get("id")
     const hash = params.get("hash")
 
-    if (id && hash && window.opener) {
+    if (id && hash) {
       const authData: Record<string, string> = {}
       params.forEach((value, key) => {
         authData[key] = value
       })
-      try {
-        window.opener.postMessage({ type: "tg_auth", ...authData }, window.location.origin)
-      } catch {}
+      localStorage.setItem("tg_auth_result", JSON.stringify(authData))
     }
 
-    setTimeout(() => window.close(), 200)
+    window.close()
   }, [])
 
   return (

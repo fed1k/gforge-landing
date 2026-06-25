@@ -55,48 +55,55 @@ export default function TelegramPage() {
       return
     }
 
-    const handleMessage = async (event: MessageEvent) => {
-      if (event.origin !== window.location.origin) return
-      const raw = event.data as Record<string, string> & { type?: string }
-      if (raw?.type !== "tg_auth" || !raw.hash) return
-      authCompleted.current = true
-      window.removeEventListener("message", handleMessage)
-      popup.close()
-
-      const data: TelegramAuthData = {
-        id: Number(raw.id),
-        first_name: raw.first_name ?? "",
-        last_name: raw.last_name,
-        username: raw.username,
-        photo_url: raw.photo_url,
-        auth_date: Number(raw.auth_date),
-        hash: raw.hash,
-      }
-
-      const result = await verifyTelegramMembership(data)
-      if (result.member) {
-        markTaskComplete("telegram")
-        router.push("/waitlist")
-      } else {
-        setError(ERROR_MESSAGES[result.error ?? ""] ?? ERROR_MESSAGES.check_failed)
-        setLoading(false)
-      }
-    }
-
-    window.addEventListener("message", handleMessage)
-
     const checkClosed = setInterval(() => {
-      if (popup.closed) {
-        clearInterval(checkClosed)
-        // Delay before treating as cancelled — postMessage may arrive just after close
-        setTimeout(() => {
-          window.removeEventListener("message", handleMessage)
-          if (!authCompleted.current) {
-            setError(ERROR_MESSAGES.cancelled)
-            setLoading(false)
-          }
-        }, 1000)
-      }
+      if (!popup.closed) return
+      clearInterval(checkClosed)
+
+      // Give the callback page time to write to localStorage before reading
+      setTimeout(async () => {
+        const stored = localStorage.getItem("tg_auth_result")
+        localStorage.removeItem("tg_auth_result")
+
+        if (!stored) {
+          setError(ERROR_MESSAGES.cancelled)
+          setLoading(false)
+          return
+        }
+
+        let raw: Record<string, string>
+        try {
+          raw = JSON.parse(stored)
+        } catch {
+          setError(ERROR_MESSAGES.invalid_hash)
+          setLoading(false)
+          return
+        }
+
+        if (!raw.hash || !raw.id) {
+          setError(ERROR_MESSAGES.invalid_hash)
+          setLoading(false)
+          return
+        }
+
+        const data: TelegramAuthData = {
+          id: Number(raw.id),
+          first_name: raw.first_name ?? "",
+          last_name: raw.last_name,
+          username: raw.username,
+          photo_url: raw.photo_url,
+          auth_date: Number(raw.auth_date),
+          hash: raw.hash,
+        }
+
+        const result = await verifyTelegramMembership(data)
+        if (result.member) {
+          markTaskComplete("telegram")
+          router.push("/waitlist")
+        } else {
+          setError(ERROR_MESSAGES[result.error ?? ""] ?? ERROR_MESSAGES.check_failed)
+          setLoading(false)
+        }
+      }, 500)
     }, 500)
   }
 
