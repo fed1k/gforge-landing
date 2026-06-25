@@ -8,7 +8,7 @@ const X_CLIENT_SECRET = "qHBLKPA8twv7rIFsyDO3YNBCTQPLd5RpWL9hEH_t7XhgujYpBr"
 const X_REDIRECT_URI = "https://giftedforge.com/waitlist/follow/callback"
 const X_ENGAGE_REDIRECT_URI = "https://giftedforge.com/waitlist/engage/callback"
 const ENGAGE_TWEET_ID = "2057819752966316272"
-const TG_BOT_TOKEN = "8749755157:AAGePFzvLAOEog5MzURG3wzakDTteVKRCSM"
+const TG_BOT_TOKEN = "8064319708:AAGAKR9GYx9xZz5Xy20b3NP5FqlCyilNaX4"
 
 export async function validateActivationCode(
   code: string,

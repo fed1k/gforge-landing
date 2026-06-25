@@ -6,7 +6,7 @@ import { BsArrowLeft, BsExclamationCircleFill } from "react-icons/bs"
 import { markTaskComplete } from "@/lib/waitlist-storage"
 import { verifyTelegramMembership } from "@/app/actions"
 
-const TG_BOT_ID = "8749755157"
+const TG_BOT_ID = "8064319708"
 
 interface TelegramAuthData {
   id: number
