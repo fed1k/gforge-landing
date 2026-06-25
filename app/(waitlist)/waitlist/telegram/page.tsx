@@ -82,11 +82,14 @@ export default function TelegramPage() {
     const checkClosed = setInterval(() => {
       if (popup.closed) {
         clearInterval(checkClosed)
-        window.removeEventListener("message", handleMessage)
-        if (!authCompleted.current) {
-          setError(ERROR_MESSAGES.cancelled)
-          setLoading(false)
-        }
+        // Delay before treating as cancelled — postMessage may arrive just after close
+        setTimeout(() => {
+          window.removeEventListener("message", handleMessage)
+          if (!authCompleted.current) {
+            setError(ERROR_MESSAGES.cancelled)
+            setLoading(false)
+          }
+        }, 1000)
       }
     }, 500)
   }
