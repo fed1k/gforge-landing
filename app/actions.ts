@@ -187,6 +187,7 @@ export async function verifyTelegramMembership(authData: {
   try {
     const { hash, ...fields } = authData
     const checkString = Object.keys(fields)
+      .filter((k) => fields[k as keyof typeof fields] != null)
       .sort()
       .map((k) => `${k}=${fields[k as keyof typeof fields]}`)
       .join("\n")

@@ -30,33 +30,40 @@ export default function TelegramPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [debug, setDebug] = useState<string | null>(null)
 
   useEffect(() => {
-    // Check both query string and hash fragment — Telegram may use either
-    const fromQuery = new URLSearchParams(window.location.search)
-    const fromHash = new URLSearchParams(window.location.hash.replace(/^#/, ""))
-    const params = fromQuery.get("hash") ? fromQuery : fromHash
-
-    const id = params.get("id")
-    const hash = params.get("hash")
-
-    // Debug: show raw URL data so we know what Telegram sent
-    setDebug(`search="${window.location.search}" hash="${window.location.hash}"`)
-
-    if (!id || !hash) return
+    // Telegram returns auth data as base64 JSON in the hash: #tgAuthResult=<base64>
+    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""))
+    const tgAuthResult = hashParams.get("tgAuthResult")
+    if (!tgAuthResult) return
 
     window.history.replaceState({}, "", window.location.pathname)
     setLoading(true)
 
+    let decoded: Record<string, unknown>
+    try {
+      decoded = JSON.parse(atob(tgAuthResult))
+    } catch {
+      setError(ERROR_MESSAGES.invalid_hash)
+      setLoading(false)
+      return
+    }
+
+    // Only include fields that are actually present — undefined fields break hash verification
     const authData: TelegramAuthData = {
-      id: Number(id),
-      first_name: params.get("first_name") ?? "",
-      last_name: params.get("last_name") ?? undefined,
-      username: params.get("username") ?? undefined,
-      photo_url: params.get("photo_url") ?? undefined,
-      auth_date: Number(params.get("auth_date")),
-      hash,
+      id: Number(decoded.id),
+      first_name: String(decoded.first_name ?? ""),
+      auth_date: Number(decoded.auth_date),
+      hash: String(decoded.hash ?? ""),
+      ...(decoded.last_name != null && { last_name: String(decoded.last_name) }),
+      ...(decoded.username != null && { username: String(decoded.username) }),
+      ...(decoded.photo_url != null && { photo_url: String(decoded.photo_url) }),
+    }
+
+    if (!authData.hash || !authData.id) {
+      setError(ERROR_MESSAGES.invalid_hash)
+      setLoading(false)
+      return
     }
 
     verifyTelegramMembership(authData).then((result) => {
@@ -132,10 +139,6 @@ export default function TelegramPage() {
           <li>3- We&apos;ll confirm your membership instantly.</li>
         </ol>
       </div>
-
-      {debug && (
-        <p className="mb-3 text-xs text-[#AAA] break-all">{debug}</p>
-      )}
 
       {error && (
         <p className="mb-5 text-sm text-red-500 flex items-center gap-1.5">
