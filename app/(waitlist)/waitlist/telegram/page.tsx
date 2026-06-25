@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { BsArrowLeft, BsExclamationCircleFill } from "react-icons/bs"
 import { markTaskComplete } from "@/lib/waitlist-storage"
@@ -24,87 +24,51 @@ const ERROR_MESSAGES: Record<string, string> = {
   invalid_hash: "Verification failed. Please try again.",
   check_failed: "Couldn't check your membership. Please try again.",
   network_error: "Connection failed. Check your internet and try again.",
-  popup_blocked: "Popup was blocked. Please allow popups for this site and try again.",
-  cancelled: "Verification cancelled. Please try again.",
 }
 
 export default function TelegramPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const authCompleted = useRef(false)
+
+  useEffect(() => {
+    // Returning from Telegram auth redirect — auth data arrives as query params
+    const params = new URLSearchParams(window.location.search)
+    const id = params.get("id")
+    const hash = params.get("hash")
+    if (!id || !hash) return
+
+    // Clean URL so a refresh doesn't re-trigger
+    window.history.replaceState({}, "", window.location.pathname)
+    setLoading(true)
+
+    const authData: TelegramAuthData = {
+      id: Number(id),
+      first_name: params.get("first_name") ?? "",
+      last_name: params.get("last_name") ?? undefined,
+      username: params.get("username") ?? undefined,
+      photo_url: params.get("photo_url") ?? undefined,
+      auth_date: Number(params.get("auth_date")),
+      hash,
+    }
+
+    verifyTelegramMembership(authData).then((result) => {
+      if (result.member) {
+        markTaskComplete("telegram")
+        router.push("/waitlist")
+      } else {
+        setError(ERROR_MESSAGES[result.error ?? ""] ?? ERROR_MESSAGES.check_failed)
+        setLoading(false)
+      }
+    })
+  }, [router])
 
   const handleVerify = () => {
     setLoading(true)
     setError(null)
-    authCompleted.current = false
-
     const origin = encodeURIComponent(window.location.origin)
-    const returnTo = encodeURIComponent(`${window.location.origin}/waitlist/telegram/callback`)
-    const left = Math.round(window.screen.width / 2 - 275)
-    const top = Math.round(window.screen.height / 2 - 235)
-    const popup = window.open(
-      `https://oauth.telegram.org/auth?bot_id=${TG_BOT_ID}&origin=${origin}&embed=1&return_to=${returnTo}`,
-      "telegram_login",
-      `width=550,height=470,left=${left},top=${top}`,
-    )
-
-    if (!popup) {
-      setError(ERROR_MESSAGES.popup_blocked)
-      setLoading(false)
-      return
-    }
-
-    const checkClosed = setInterval(() => {
-      if (!popup.closed) return
-      clearInterval(checkClosed)
-
-      // Give the callback page time to write to localStorage before reading
-      setTimeout(async () => {
-        const stored = localStorage.getItem("tg_auth_result")
-        localStorage.removeItem("tg_auth_result")
-
-        if (!stored) {
-          setError(ERROR_MESSAGES.cancelled)
-          setLoading(false)
-          return
-        }
-
-        let raw: Record<string, string>
-        try {
-          raw = JSON.parse(stored)
-        } catch {
-          setError(ERROR_MESSAGES.invalid_hash)
-          setLoading(false)
-          return
-        }
-
-        if (!raw.hash || !raw.id) {
-          setError(ERROR_MESSAGES.invalid_hash)
-          setLoading(false)
-          return
-        }
-
-        const data: TelegramAuthData = {
-          id: Number(raw.id),
-          first_name: raw.first_name ?? "",
-          last_name: raw.last_name,
-          username: raw.username,
-          photo_url: raw.photo_url,
-          auth_date: Number(raw.auth_date),
-          hash: raw.hash,
-        }
-
-        const result = await verifyTelegramMembership(data)
-        if (result.member) {
-          markTaskComplete("telegram")
-          router.push("/waitlist")
-        } else {
-          setError(ERROR_MESSAGES[result.error ?? ""] ?? ERROR_MESSAGES.check_failed)
-          setLoading(false)
-        }
-      }, 500)
-    }, 500)
+    const returnTo = encodeURIComponent(`${window.location.origin}/waitlist/telegram`)
+    window.location.href = `https://oauth.telegram.org/auth?bot_id=${TG_BOT_ID}&origin=${origin}&return_to=${returnTo}`
   }
 
   return (
@@ -155,7 +119,7 @@ export default function TelegramPage() {
         <ol className="space-y-2 text-sm text-[#555] leading-relaxed">
           <li>1- Click &quot;Open Telegram &amp; Join&quot; above and join the channel.</li>
           <li>2- Click &quot;Verify Membership&quot; below and log in with your Telegram account.</li>
-          <li>3- We&apos;ll confirm your membership instantly — no bot required.</li>
+          <li>3- We&apos;ll confirm your membership instantly.</li>
         </ol>
       </div>
 
