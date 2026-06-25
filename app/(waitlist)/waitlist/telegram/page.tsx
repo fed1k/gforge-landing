@@ -30,15 +30,22 @@ export default function TelegramPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [debug, setDebug] = useState<string | null>(null)
 
   useEffect(() => {
-    // Returning from Telegram auth redirect — auth data arrives as query params
-    const params = new URLSearchParams(window.location.search)
+    // Check both query string and hash fragment — Telegram may use either
+    const fromQuery = new URLSearchParams(window.location.search)
+    const fromHash = new URLSearchParams(window.location.hash.replace(/^#/, ""))
+    const params = fromQuery.get("hash") ? fromQuery : fromHash
+
     const id = params.get("id")
     const hash = params.get("hash")
+
+    // Debug: show raw URL data so we know what Telegram sent
+    setDebug(`search="${window.location.search}" hash="${window.location.hash}"`)
+
     if (!id || !hash) return
 
-    // Clean URL so a refresh doesn't re-trigger
     window.history.replaceState({}, "", window.location.pathname)
     setLoading(true)
 
@@ -60,6 +67,9 @@ export default function TelegramPage() {
         setError(ERROR_MESSAGES[result.error ?? ""] ?? ERROR_MESSAGES.check_failed)
         setLoading(false)
       }
+    }).catch(() => {
+      setError(ERROR_MESSAGES.network_error)
+      setLoading(false)
     })
   }, [router])
 
@@ -122,6 +132,10 @@ export default function TelegramPage() {
           <li>3- We&apos;ll confirm your membership instantly.</li>
         </ol>
       </div>
+
+      {debug && (
+        <p className="mb-3 text-xs text-[#AAA] break-all">{debug}</p>
+      )}
 
       {error && (
         <p className="mb-5 text-sm text-red-500 flex items-center gap-1.5">
