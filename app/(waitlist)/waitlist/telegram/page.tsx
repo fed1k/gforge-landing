@@ -1,53 +1,94 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { BsArrowLeft, BsExclamationCircleFill } from "react-icons/bs"
 import { markTaskComplete } from "@/lib/waitlist-storage"
-import { checkTelegramVerification } from "@/app/actions"
+import { verifyTelegramMembership } from "@/app/actions"
+
+const TG_BOT_ID = "8749755157"
+
+interface TelegramAuthData {
+  id: number
+  first_name: string
+  last_name?: string
+  username?: string
+  photo_url?: string
+  auth_date: number
+  hash: string
+}
+
+const ERROR_MESSAGES: Record<string, string> = {
+  not_member: "You haven't joined @Giftedforge yet. Join the channel first and try again.",
+  auth_expired: "Session expired. Please try again.",
+  invalid_hash: "Verification failed. Please try again.",
+  check_failed: "Couldn't check your membership. Please try again.",
+  network_error: "Connection failed. Check your internet and try again.",
+  popup_blocked: "Popup was blocked. Please allow popups for this site and try again.",
+  cancelled: "Verification cancelled. Please try again.",
+}
 
 export default function TelegramPage() {
   const router = useRouter()
-  const [sessionId, setSessionId] = useState("")
-  const [polling, setPolling] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const pollTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const elapsedRef = useRef(0)
+  const authCompleted = useRef(false)
 
-  useEffect(() => {
-    setSessionId(crypto.randomUUID())
-    return () => { if (pollTimer.current) clearTimeout(pollTimer.current) }
-  }, [])
+  const handleVerify = () => {
+    setLoading(true)
+    setError(null)
+    authCompleted.current = false
 
-  const schedulePoll = (sid: string) => {
-    pollTimer.current = setTimeout(async () => {
-      elapsedRef.current += 3
+    const origin = encodeURIComponent(window.location.origin)
+    const left = Math.round(window.screen.width / 2 - 275)
+    const top = Math.round(window.screen.height / 2 - 235)
+    const popup = window.open(
+      `https://oauth.telegram.org/auth?bot_id=${TG_BOT_ID}&origin=${origin}&embed=1`,
+      "telegram_login",
+      `width=550,height=470,left=${left},top=${top}`,
+    )
 
-      if (elapsedRef.current > 120) {
-        setPolling(false)
-        setError("Verification timed out. Please try again.")
+    if (!popup) {
+      setError(ERROR_MESSAGES.popup_blocked)
+      setLoading(false)
+      return
+    }
+
+    const handleMessage = async (event: MessageEvent) => {
+      if (event.origin !== "https://oauth.telegram.org") return
+      authCompleted.current = true
+      window.removeEventListener("message", handleMessage)
+      popup.close()
+
+      const data = event.data as TelegramAuthData
+      if (!data?.hash) {
+        setError(ERROR_MESSAGES.invalid_hash)
+        setLoading(false)
         return
       }
 
-      const result = await checkTelegramVerification(sid)
-
-      if (result.status === "verified") {
+      const result = await verifyTelegramMembership(data)
+      if (result.member) {
         markTaskComplete("telegram")
         router.push("/waitlist")
-        return
+      } else {
+        setError(ERROR_MESSAGES[result.error ?? ""] ?? ERROR_MESSAGES.check_failed)
+        setLoading(false)
       }
+    }
 
-      schedulePoll(sid)
-    }, 3000)
-  }
+    window.addEventListener("message", handleMessage)
 
-  const startVerification = () => {
-    if (!sessionId || polling) return
-    setPolling(true)
-    setError(null)
-    elapsedRef.current = 0
-    window.open(`https://t.me/giftedforge_bot?start=gf_${sessionId}`, "_blank")
-    schedulePoll(sessionId)
+    const checkClosed = setInterval(() => {
+      if (popup.closed) {
+        clearInterval(checkClosed)
+        window.removeEventListener("message", handleMessage)
+        if (!authCompleted.current) {
+          setError(ERROR_MESSAGES.cancelled)
+          setLoading(false)
+        }
+      }
+    }, 500)
   }
 
   return (
@@ -97,8 +138,8 @@ export default function TelegramPage() {
         </div>
         <ol className="space-y-2 text-sm text-[#555] leading-relaxed">
           <li>1- Click &quot;Open Telegram &amp; Join&quot; above and join the channel.</li>
-          <li>2- Click &quot;Verify Membership&quot; below — our bot will open.</li>
-          <li>3- In the bot, forward any message from @Giftedforge.</li>
+          <li>2- Click &quot;Verify Membership&quot; below and log in with your Telegram account.</li>
+          <li>3- We&apos;ll confirm your membership instantly — no bot required.</li>
         </ol>
       </div>
 
@@ -110,11 +151,11 @@ export default function TelegramPage() {
       )}
 
       <button
-        onClick={startVerification}
-        disabled={polling || !sessionId}
+        onClick={handleVerify}
+        disabled={loading}
         className="w-full bg-[#6B6AFD] text-white font-semibold py-4 rounded-2xl hover:shadow-[0px_4px_24px_0px_#6B6AFD66] transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:shadow-none"
       >
-        {polling ? "Waiting for verification…" : "Verify Membership"}
+        {loading ? "Verifying…" : "Verify Membership"}
       </button>
     </div>
   )

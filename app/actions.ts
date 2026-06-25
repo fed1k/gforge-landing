@@ -1,11 +1,14 @@
 "use server";
 
+import crypto from "crypto"
+
 const BACKEND_URL = process.env.GIFTEDFORGE_API_URL ?? "https://nft.giftedforge.com"
 const X_CLIENT_ID = "WU5aenlrejRqMzVRZGdPcURxQkw6MTpjaQ"
 const X_CLIENT_SECRET = "qHBLKPA8twv7rIFsyDO3YNBCTQPLd5RpWL9hEH_t7XhgujYpBr"
 const X_REDIRECT_URI = "https://giftedforge.com/waitlist/follow/callback"
 const X_ENGAGE_REDIRECT_URI = "https://giftedforge.com/waitlist/engage/callback"
 const ENGAGE_TWEET_ID = "2057819752966316272"
+const TG_BOT_TOKEN = "8749755157:AAGePFzvLAOEog5MzURG3wzakDTteVKRCSM"
 
 export async function validateActivationCode(
   code: string,
@@ -170,6 +173,46 @@ export async function verifyXEngage(
     return { liked, username: user.username }
   } catch {
     return { liked: false, error: "network_error" }
+  }
+}
+
+export async function verifyTelegramMembership(authData: {
+  id: number
+  first_name: string
+  last_name?: string
+  username?: string
+  auth_date: number
+  hash: string
+}): Promise<{ member: boolean; error?: string }> {
+  try {
+    const { hash, ...fields } = authData
+    const checkString = Object.keys(fields)
+      .sort()
+      .map((k) => `${k}=${fields[k as keyof typeof fields]}`)
+      .join("\n")
+    const secretKey = crypto.createHash("sha256").update(TG_BOT_TOKEN).digest()
+    const hmac = crypto.createHmac("sha256", secretKey).update(checkString).digest("hex")
+    if (hmac !== hash) return { member: false, error: "invalid_hash" }
+
+    const ageSeconds = Math.floor(Date.now() / 1000) - authData.auth_date
+    if (ageSeconds > 3600) return { member: false, error: "auth_expired" }
+
+    const res = await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/getChatMember`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: "@Giftedforge", user_id: authData.id }),
+      cache: "no-store",
+    })
+    const json = await res.json()
+    if (!json.ok) {
+      console.error("[tg-verify] getChatMember failed:", json)
+      return { member: false, error: "check_failed" }
+    }
+    const status: string = json.result?.status ?? "left"
+    const isMember = ["creator", "administrator", "member"].includes(status)
+    return { member: isMember, error: isMember ? undefined : "not_member" }
+  } catch {
+    return { member: false, error: "network_error" }
   }
 }
 
