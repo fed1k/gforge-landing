@@ -38,7 +38,7 @@ export default function EngageCallbackPage() {
     verifyXEngage(code, verifier).then((result) => {
       if (result.error) {
         router.replace(`/waitlist/engage?error=${result.error}`)
-      } else if (result.retweeted || result.commented) {
+      } else if (result.retweeted && result.commented) {
         router.replace("/waitlist/engage?verified=1")
       } else {
         // Pass actual check results so the page can update ticks accordingly

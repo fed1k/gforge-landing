@@ -81,11 +81,20 @@ export default function EngagePage() {
     }
 
     if (err) {
-      // When verification results are present, override click-based ticks for repost/comment
       const retweeted = params.get("retweeted")
       const commented = params.get("commented")
       if (retweeted !== null && commented !== null) {
         setVerifiedState({ repost: retweeted === "1", comment: commented === "1" })
+        if (err === "not_engaged") {
+          if (retweeted === "1" && commented === "0") {
+            setError("Repost verified ✓ — please also leave a comment on the post, then verify again.")
+          } else if (retweeted === "0" && commented === "1") {
+            setError("Comment verified ✓ — please also repost the tweet, then verify again.")
+          } else {
+            setError("Please repost and comment on the tweet, then verify again.")
+          }
+          return
+        }
       }
       setError(ERROR_MESSAGES[err] ?? `Auth error: ${err}. Please try again.`)
     }
