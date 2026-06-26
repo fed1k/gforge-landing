@@ -23,17 +23,18 @@ const X_ENGAGE_REDIRECT_URI = "https://giftedforge.com/waitlist/engage/callback"
 const TWEET_ID = "2057819752966316272"
 
 const ERROR_MESSAGES: Record<string, string> = {
-  not_liked: "We couldn't verify your like. Please like the tweet and try again.",
-  like_unauthorized: "X didn't grant like-read permission. Re-connect your account and try again.",
-  like_forbidden: "X blocked access to your likes (API access level). Please contact support.",
-  like_rate_limited: "Too many requests — wait a minute and try again.",
-  like_check_failed: "Couldn't check your likes. Please try again.",
+  not_engaged: "We couldn't verify your repost or comment. Please repost or comment and try again.",
+  user_not_found: "Couldn't find your X account. Make sure your profile is public and try again.",
+  rate_limited: "Too many requests — wait a few minutes and try again.",
+  checker_not_configured: "Verification is temporarily unavailable. Please try again later.",
+  engage_check_failed: "Couldn't check your engagement. Please try again.",
   token_exchange_failed: "Authorization failed. Please try again.",
   user_fetch_failed: "Couldn't fetch your X profile. Please try again.",
   no_code: "Twitter didn't return an auth code. Please try again.",
   no_verifier: "Session expired — please try again.",
   state_mismatch: "Security check failed. Please try again.",
   access_denied: "You cancelled the X authorization. Please try again.",
+  network_error: "Connection failed. Check your internet and try again.",
 }
 
 const ACTIONS: { key: EngageAction; label: string; icon: React.ElementType; intentUrl: string }[] =
@@ -190,7 +191,7 @@ export default function EngagePage() {
       </button>
 
       <p className="text-center text-xs text-[#AAAACC] mt-4">
-        Your like is verified via X. Repost and comment are on your honor.
+        Repost and comment are verified. Like is on your honor.
       </p>
     </div>
   )

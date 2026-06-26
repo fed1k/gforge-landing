@@ -115,7 +115,7 @@ export async function exchangeXCode(
 export async function verifyXEngage(
   code: string,
   codeVerifier: string,
-): Promise<{ liked: boolean; username?: string; error?: string }> {
+): Promise<{ retweeted: boolean; commented: boolean; username?: string; error?: string }> {
   try {
     const basicAuth = Buffer.from(`${X_CLIENT_ID}:${X_CLIENT_SECRET}`).toString("base64")
 
@@ -136,7 +136,7 @@ export async function verifyXEngage(
 
     if (!tokenRes.ok) {
       console.error("[x-engage] token exchange failed:", tokenRes.status, await tokenRes.text())
-      return { liked: false, error: "token_exchange_failed" }
+      return { retweeted: false, commented: false, error: "token_exchange_failed" }
     }
 
     const { access_token } = await tokenRes.json()
@@ -148,31 +148,30 @@ export async function verifyXEngage(
 
     if (!userRes.ok) {
       console.error("[x-engage] users/me failed:", userRes.status, await userRes.text())
-      return { liked: false, error: "user_fetch_failed" }
+      return { retweeted: false, commented: false, error: "user_fetch_failed" }
     }
 
     const { data: user } = await userRes.json()
 
-    const likedRes = await fetch(
-      `https://api.twitter.com/2/users/${user.id}/liked_tweets?max_results=100`,
-      { headers: { Authorization: `Bearer ${access_token}` }, cache: "no-store" },
+    // Check retweet + comment via our backend session-based checker
+    const engageRes = await fetch(
+      `${BACKEND_URL}/api/waitlist/verify/engage?username=${encodeURIComponent(user.username)}&tweet_id=${ENGAGE_TWEET_ID}`,
+      { cache: "no-store" },
     )
 
-    if (!likedRes.ok) {
-      const errBody = await likedRes.text()
-      console.error("[x-engage] liked_tweets failed:", likedRes.status, errBody)
-      if (likedRes.status === 401) return { liked: false, error: "like_unauthorized" }
-      if (likedRes.status === 403) return { liked: false, error: "like_forbidden" }
-      if (likedRes.status === 429) return { liked: false, error: "like_rate_limited" }
-      return { liked: false, error: `like_check_failed_${likedRes.status}` }
+    if (!engageRes.ok) {
+      const err = await engageRes.json().catch(() => ({}))
+      console.error("[x-engage] engage check failed:", engageRes.status, err)
+      if (engageRes.status === 429) return { retweeted: false, commented: false, error: "rate_limited" }
+      if (engageRes.status === 404) return { retweeted: false, commented: false, error: "user_not_found" }
+      if (engageRes.status === 503) return { retweeted: false, commented: false, error: "checker_not_configured" }
+      return { retweeted: false, commented: false, error: "engage_check_failed" }
     }
 
-    const likedData = await likedRes.json()
-    const liked = likedData.data?.some((t: { id: string }) => t.id === ENGAGE_TWEET_ID) ?? false
-
-    return { liked, username: user.username }
+    const { retweeted, commented } = await engageRes.json()
+    return { retweeted: !!retweeted, commented: !!commented, username: user.username }
   } catch {
-    return { liked: false, error: "network_error" }
+    return { retweeted: false, commented: false, error: "network_error" }
   }
 }
 
