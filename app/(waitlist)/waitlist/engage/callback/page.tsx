@@ -41,7 +41,10 @@ export default function EngageCallbackPage() {
       } else if (result.retweeted || result.commented) {
         router.replace("/waitlist/engage?verified=1")
       } else {
-        router.replace("/waitlist/engage?error=not_engaged")
+        // Pass actual check results so the page can update ticks accordingly
+        router.replace(
+          `/waitlist/engage?error=not_engaged&retweeted=${result.retweeted ? 1 : 0}&commented=${result.commented ? 1 : 0}`,
+        )
       }
     })
   }, [router])

@@ -62,6 +62,8 @@ const ACTIONS: { key: EngageAction; label: string; icon: React.ElementType; inte
 export default function EngagePage() {
   const router = useRouter()
   const [clicked, setClicked] = useState<Set<EngageAction>>(new Set())
+  // null = not yet verified; after a check, holds actual backend results for repost/comment
+  const [verifiedState, setVerifiedState] = useState<{ repost: boolean; comment: boolean } | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -79,9 +81,27 @@ export default function EngagePage() {
     }
 
     if (err) {
+      // When verification results are present, override click-based ticks for repost/comment
+      const retweeted = params.get("retweeted")
+      const commented = params.get("commented")
+      if (retweeted !== null && commented !== null) {
+        setVerifiedState({ repost: retweeted === "1", comment: commented === "1" })
+      }
       setError(ERROR_MESSAGES[err] ?? `Auth error: ${err}. Please try again.`)
     }
   }, [router])
+
+  // Checkmark shown only after backend confirms action. Like = click-based (honor system).
+  const isVerified = (key: EngageAction) => {
+    if (key === "like") return clicked.has("like")
+    if (verifiedState === null) return false
+    if (key === "repost")  return verifiedState.repost
+    if (key === "comment") return verifiedState.comment
+    return false
+  }
+
+  // Icon/text turns purple as soon as user opens the intent (before verification)
+  const isInitiated = (key: EngageAction) => clicked.has(key) || isVerified(key)
 
   const handleActionClick = (action: EngageAction, intentUrl: string) => {
     window.open(intentUrl, "_blank", "width=550,height=420,noopener,noreferrer")
@@ -160,17 +180,11 @@ export default function EngagePage() {
             onClick={() => handleActionClick(key, intentUrl)}
             className="w-full flex items-center gap-4 bg-[#F5F5FF] rounded-2xl px-5 py-4 hover:bg-[#EFEFFF] transition-colors cursor-pointer text-left"
           >
-            <Icon
-              className={`w-5 h-5 shrink-0 ${clicked.has(key) ? "text-[#6B6AFD]" : "text-[#BBB]"}`}
-            />
-            <span
-              className={`text-sm font-medium flex-1 ${clicked.has(key) ? "text-[#0E0636]" : "text-[#888]"}`}
-            >
+            <Icon className={`w-5 h-5 shrink-0 ${isInitiated(key) ? "text-[#6B6AFD]" : "text-[#BBB]"}`} />
+            <span className={`text-sm font-medium flex-1 ${isInitiated(key) ? "text-[#0E0636]" : "text-[#888]"}`}>
               {label}
             </span>
-            {clicked.has(key) && (
-              <BsCheckCircleFill className="w-4 h-4 text-[#6B6AFD] shrink-0" />
-            )}
+            {isVerified(key) && <BsCheckCircleFill className="w-4 h-4 text-[#6B6AFD] shrink-0" />}
           </button>
         ))}
       </div>
