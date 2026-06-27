@@ -1,9 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { BsPatchCheckFill, BsClipboard, BsCheckLg } from "react-icons/bs"
+import { BsPatchCheckFill, BsClipboard, BsCheckLg, BsArrowRight } from "react-icons/bs"
 import { getReferralCodes, getEmail } from "@/lib/waitlist-storage"
 import { getWaitlistStats } from "@/app/actions"
+
+const TG_MINI_APP_URL = "https://t.me/giftedforge_bot"
 
 export default function WaitlistSuccessPage() {
   const [codes, setCodes] = useState<string[]>([])
@@ -108,11 +110,24 @@ export default function WaitlistSuccessPage() {
         </div>
       </div>
 
-      <div className="bg-[#EEF0FF] rounded-2xl p-4">
+      <div className="bg-[#EEF0FF] rounded-2xl p-4 mb-6">
         <p className="text-sm text-[#6B6AFD] leading-relaxed">
           The more friends you invite, the closer you get to early access.
         </p>
       </div>
+
+      <a
+        href={TG_MINI_APP_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="w-full bg-[#0E0636] text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2.5 hover:shadow-[0px_4px_24px_0px_rgba(14,6,54,0.3)] transition-all"
+      >
+        <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white shrink-0" aria-hidden="true">
+          <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.06 13.617l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.888.942z" />
+        </svg>
+        Open GiftedForge App
+        <BsArrowRight className="w-4 h-4" />
+      </a>
     </div>
   )
 }
