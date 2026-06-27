@@ -19,7 +19,7 @@ interface TelegramAuthData {
 }
 
 const ERROR_MESSAGES: Record<string, string> = {
-  not_member: "You haven't joined @Giftedforge yet. Join the channel first and try again.",
+  not_member: "You haven't joined our Telegram group yet. Join first and try again.",
   auth_expired: "Session expired. Please try again.",
   invalid_hash: "Verification failed. Please try again.",
   check_failed: "Couldn't check your membership. Please try again.",
@@ -105,7 +105,7 @@ export default function TelegramPage() {
 
       <h1 className="text-2xl font-bold text-[#0E0636] mb-2">Join Telegram</h1>
       <p className="text-[#888] text-sm leading-relaxed mb-8">
-        Join our Telegram channel and verify your membership to complete this step.
+        Join our Telegram community group and verify your membership to complete this step.
       </p>
 
       <div className="bg-[#F5F5FF] rounded-3xl p-6 mb-5 flex flex-col items-center">
@@ -114,12 +114,12 @@ export default function TelegramPage() {
             <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.06 13.617l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.888.942z" />
           </svg>
         </div>
-        <h3 className="text-lg font-bold text-[#0E0636] mb-1">Join @Giftedforge</h3>
+        <h3 className="text-lg font-bold text-[#0E0636] mb-1">Join GiftedForge Group</h3>
         <p className="text-sm text-[#888] text-center mb-5">
-          Get the latest updates directly in Telegram
+          Join our exclusive community group to stay in the loop
         </p>
         <a
-          href="https://t.me/Giftedforge"
+          href="https://t.me/+k-pMmANm6dxhYTZi"
           target="_blank"
           rel="noopener noreferrer"
           className="w-full border border-[#CCCCCC] rounded-2xl py-3.5 font-medium text-[#0E0636] text-sm hover:bg-gray-50 transition-colors text-center block"
@@ -134,7 +134,7 @@ export default function TelegramPage() {
           <span className="font-semibold text-sm text-[#0E0636]">How to verify:</span>
         </div>
         <ol className="space-y-2 text-sm text-[#555] leading-relaxed">
-          <li>1- Click &quot;Open Telegram &amp; Join&quot; above and join the channel.</li>
+          <li>1- Click &quot;Open Telegram &amp; Join&quot; above and join the group.</li>
           <li>2- Click &quot;Verify Membership&quot; below and log in with your Telegram account.</li>
           <li>3- We&apos;ll confirm your membership instantly.</li>
         </ol>

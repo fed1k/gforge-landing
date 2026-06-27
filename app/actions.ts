@@ -200,7 +200,7 @@ export async function verifyTelegramMembership(authData: {
     const res = await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/getChatMember`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: "@Giftedforge", user_id: authData.id }),
+      body: JSON.stringify({ chat_id: -1004412821147, user_id: authData.id }),
       cache: "no-store",
     })
     const json = await res.json()
