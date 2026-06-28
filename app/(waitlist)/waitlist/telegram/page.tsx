@@ -1,91 +1,87 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { BsArrowLeft, BsExclamationCircleFill } from "react-icons/bs"
 import { markTaskComplete } from "@/lib/waitlist-storage"
-import { verifyTelegramMembership } from "@/app/actions"
+import { checkTelegramVerification } from "@/app/actions"
 
-const TG_BOT_ID = "8064319708"
+const TG_BOT_USERNAME = "giftedforge_bot"
+const POLL_INTERVAL_MS = 2500
+const POLL_TIMEOUT_MS = 120_000 // 2 minutes
 
-interface TelegramAuthData {
-  id: number
-  first_name: string
-  last_name?: string
-  username?: string
-  photo_url?: string
-  auth_date: number
-  hash: string
+function generateSessionId(): string {
+  const arr = new Uint8Array(16)
+  crypto.getRandomValues(arr)
+  return Array.from(arr, (b) => b.toString(16).padStart(2, "0")).join("")
 }
 
 const ERROR_MESSAGES: Record<string, string> = {
-  not_member: "You haven't joined our Telegram group yet. Join first and try again.",
-  auth_expired: "Session expired. Please try again.",
-  invalid_hash: "Verification failed. Please try again.",
-  check_failed: "Couldn't check your membership. Please try again.",
+  not_member: "You haven't joined our group yet. Join first, then try again.",
+  timeout: "Verification timed out. Please try again.",
   network_error: "Connection failed. Check your internet and try again.",
 }
 
 export default function TelegramPage() {
   const router = useRouter()
-  const [loading, setLoading] = useState(false)
+  const [phase, setPhase] = useState<"idle" | "waiting" | "done">("idle")
   const [error, setError] = useState<string | null>(null)
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const sessionRef = useRef<string | null>(null)
 
-  useEffect(() => {
-    // Telegram returns auth data as base64 JSON in the hash: #tgAuthResult=<base64>
-    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""))
-    const tgAuthResult = hashParams.get("tgAuthResult")
-    if (!tgAuthResult) return
+  const stopPolling = () => {
+    if (pollRef.current) clearInterval(pollRef.current)
+    if (timeoutRef.current) clearTimeout(timeoutRef.current)
+  }
 
-    window.history.replaceState({}, "", window.location.pathname)
-    setLoading(true)
-
-    let decoded: Record<string, unknown>
-    try {
-      decoded = JSON.parse(atob(tgAuthResult))
-    } catch {
-      setError(ERROR_MESSAGES.invalid_hash)
-      setLoading(false)
-      return
-    }
-
-    // Only include fields that are actually present — undefined fields break hash verification
-    const authData: TelegramAuthData = {
-      id: Number(decoded.id),
-      first_name: String(decoded.first_name ?? ""),
-      auth_date: Number(decoded.auth_date),
-      hash: String(decoded.hash ?? ""),
-      ...(decoded.last_name != null && { last_name: String(decoded.last_name) }),
-      ...(decoded.username != null && { username: String(decoded.username) }),
-      ...(decoded.photo_url != null && { photo_url: String(decoded.photo_url) }),
-    }
-
-    if (!authData.hash || !authData.id) {
-      setError(ERROR_MESSAGES.invalid_hash)
-      setLoading(false)
-      return
-    }
-
-    verifyTelegramMembership(authData).then((result) => {
-      if (result.member) {
-        markTaskComplete("telegram")
-        router.push("/waitlist")
-      } else {
-        setError(ERROR_MESSAGES[result.error ?? ""] ?? ERROR_MESSAGES.check_failed)
-        setLoading(false)
-      }
-    }).catch(() => {
-      setError(ERROR_MESSAGES.network_error)
-      setLoading(false)
-    })
-  }, [router])
+  useEffect(() => () => stopPolling(), [])
 
   const handleVerify = () => {
-    setLoading(true)
     setError(null)
-    const origin = encodeURIComponent(window.location.origin)
-    const returnTo = encodeURIComponent(`${window.location.origin}/waitlist/telegram`)
-    window.location.href = `https://oauth.telegram.org/auth?bot_id=${TG_BOT_ID}&origin=${origin}&return_to=${returnTo}`
+    const sessionId = generateSessionId()
+    sessionRef.current = sessionId
+    localStorage.setItem("tg_verify_session", sessionId)
+
+    // Open bot deep link — Telegram passes start=gf_<sessionId> to the bot
+    window.open(
+      `https://t.me/${TG_BOT_USERNAME}?start=gf_${sessionId}`,
+      "_blank",
+      "noopener,noreferrer",
+    )
+
+    setPhase("waiting")
+
+    // Poll backend every 2.5s until verified, not_member, or timeout
+    pollRef.current = setInterval(async () => {
+      try {
+        const result = await checkTelegramVerification(sessionId)
+        if (result.status === "verified") {
+          stopPolling()
+          markTaskComplete("telegram")
+          setPhase("done")
+          router.push("/waitlist")
+        } else if (result.status === "not_member") {
+          stopPolling()
+          setError(ERROR_MESSAGES.not_member)
+          setPhase("idle")
+        }
+        // "pending" → keep polling
+      } catch {
+        // network hiccup — keep trying
+      }
+    }, POLL_INTERVAL_MS)
+
+    timeoutRef.current = setTimeout(() => {
+      stopPolling()
+      setError(ERROR_MESSAGES.timeout)
+      setPhase("idle")
+    }, POLL_TIMEOUT_MS)
+  }
+
+  const handleRetry = () => {
+    setError(null)
+    handleVerify()
   }
 
   return (
@@ -108,6 +104,7 @@ export default function TelegramPage() {
         Join our Telegram community group and verify your membership to complete this step.
       </p>
 
+      {/* Join group card */}
       <div className="bg-[#F5F5FF] rounded-3xl p-6 mb-5 flex flex-col items-center">
         <div className="w-16 h-16 rounded-full bg-[#229ED9] flex items-center justify-center mb-4">
           <svg viewBox="0 0 24 24" className="w-9 h-9 fill-white" aria-hidden="true">
@@ -128,18 +125,42 @@ export default function TelegramPage() {
         </a>
       </div>
 
+      {/* How to verify */}
       <div className="bg-[#F5F5FF] rounded-3xl p-5 mb-8">
         <div className="flex items-center gap-2 mb-3">
           <BsExclamationCircleFill className="w-4 h-4 text-[#6B6AFD]" />
           <span className="font-semibold text-sm text-[#0E0636]">How to verify:</span>
         </div>
         <ol className="space-y-2 text-sm text-[#555] leading-relaxed">
-          <li>1- Click &quot;Open Telegram &amp; Join&quot; above and join the group.</li>
-          <li>2- Click &quot;Verify Membership&quot; below and log in with your Telegram account.</li>
-          <li>3- We&apos;ll confirm your membership instantly.</li>
+          <li>1 — Join the group using the button above.</li>
+          <li>2 — Click &quot;Verify Membership&quot; below.</li>
+          <li>3 — Start the bot that opens — it checks instantly.</li>
         </ol>
       </div>
 
+      {/* Waiting state */}
+      {phase === "waiting" && (
+        <div className="mb-5 bg-[#F5F5FF] rounded-2xl px-5 py-4 text-center">
+          <p className="text-sm font-semibold text-[#0E0636] mb-1">Waiting for bot confirmation…</p>
+          <p className="text-xs text-[#888]">
+            Open the bot link that just appeared and tap <strong>Start</strong>. This page will update automatically.
+          </p>
+          <button
+            onClick={() =>
+              window.open(
+                `https://t.me/${TG_BOT_USERNAME}?start=gf_${sessionRef.current}`,
+                "_blank",
+                "noopener,noreferrer",
+              )
+            }
+            className="mt-3 text-xs text-[#6B6AFD] font-semibold cursor-pointer underline"
+          >
+            Reopen bot link
+          </button>
+        </div>
+      )}
+
+      {/* Error */}
       {error && (
         <p className="mb-5 text-sm text-red-500 flex items-center gap-1.5">
           <BsExclamationCircleFill className="w-4 h-4 shrink-0" />
@@ -147,13 +168,23 @@ export default function TelegramPage() {
         </p>
       )}
 
-      <button
-        onClick={handleVerify}
-        disabled={loading}
-        className="w-full bg-[#6B6AFD] text-white font-semibold py-4 rounded-2xl hover:shadow-[0px_4px_24px_0px_#6B6AFD66] transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:shadow-none"
-      >
-        {loading ? "Verifying…" : "Verify Membership"}
-      </button>
+      {phase === "idle" && (
+        <button
+          onClick={error ? handleRetry : handleVerify}
+          className="w-full bg-[#6B6AFD] text-white font-semibold py-4 rounded-2xl hover:shadow-[0px_4px_24px_0px_#6B6AFD66] transition-all cursor-pointer"
+        >
+          Verify Membership
+        </button>
+      )}
+
+      {phase === "waiting" && (
+        <button
+          onClick={() => { stopPolling(); setPhase("idle") }}
+          className="w-full border border-[#CCCCCC] text-[#888] font-medium py-4 rounded-2xl cursor-pointer text-sm"
+        >
+          Cancel
+        </button>
+      )}
     </div>
   )
 }

@@ -218,7 +218,7 @@ export async function verifyTelegramMembership(authData: {
 
 export async function checkTelegramVerification(
   sessionId: string,
-): Promise<{ status: "pending" | "waiting" | "verified" }> {
+): Promise<{ status: "pending" | "verified" | "not_member" }> {
   try {
     const res = await fetch(
       `${BACKEND_URL}/api/waitlist/verify/telegram?session_id=${encodeURIComponent(sessionId)}`,
