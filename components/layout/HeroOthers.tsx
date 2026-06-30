@@ -8,7 +8,7 @@ const poppins = Poppins({
     display: 'swap',
 })
 
-const HeroOthers = ({ isAbout = true, subtextWidth = "lg:max-w-[690px] max-w-[345px]", title = "About GiftedForge", subtext = "GiftedForge is building the future of digital empowerment. We create connected platforms that help creators, freelancers, and communities work smarter, grow faster, and unlock new opportunities. Today, our ecosystem is powered by two core platforms." }) => {
+const HeroOthers = ({ isAbout = true, subtextWidth = "lg:max-w-[690px] max-w-[345px]", title = "About GiftedForge", subtext = <>GiftedForge is building the future of digital empowerment. We create <br className="hidden lg:inline" /> connected platforms that help creators, freelancers, and communities work <br className="hidden lg:inline" /> smarter, grow faster, and unlock new opportunities. Today, our ecosystem is powered by two core platforms.</> }) => {
     return (
         <section className="mx-3 h-[688px] lg:h-[606px] relative flex items-center flex-col justify-center lg:mx-6 relative overflow-hidden mb-3 bg-[#6B6AFD] px-3 rounded-3xl">
             {isAbout &&

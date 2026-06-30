@@ -73,6 +73,7 @@ const platformsData: { label: string; buttonLabel: string; items: AccordionItem[
 const AboutTrust = () => {
     const [activePlatform, setActivePlatform] = useState(0);
     const [openItems, setOpenItems] = useState<Set<number>>(new Set([0]));
+    const [isCtaActive, setIsCtaActive] = useState(false);
 
     const currentPlatform = platformsData[activePlatform];
     const items = currentPlatform.items;
@@ -107,11 +108,11 @@ const AboutTrust = () => {
 
                 {/* Accordion */}
                 <div className="flex-[0.72]">
-                    {items.map((item, i) => {
+                    {items.map((item, i, list) => {
                         const isOpen = openItems.has(i);
                         return (
                             <div key={i} className="">
-                                <div className={`border-b rounded-xl mb-8 ${isOpen ? "bg-[#6B6AFD0D]  border-transparent  py-5 px-4 lg:p-6 " : "py-5 px-4 border-[#666F8B33]"}`}>
+                                <div className={`border-b rounded-xl ${list.length - 1 === i && allOpen ? "mb-11" : "mb-8"}  ${isOpen ? "bg-[#6B6AFD0D]  border-transparent  py-5 px-4 lg:p-6 " : "py-5 px-4 border-[#666F8B33]"}`}>
                                     <button
                                         onClick={() => toggleItem(i)}
                                         className="w-full flex items-start justify-between text-left gap-4"
@@ -135,7 +136,7 @@ const AboutTrust = () => {
                                             {Array.isArray(item.description) ? (
                                                 <ul className="list-disc list-inside space-y-2">
                                                     {item.description.map((point, j) => (
-                                                        <li key={j} className="text-sm md:text-base font-light text-[#0E0636] leading-[148%]">
+                                                        <li key={j} className="text-sm md:text-base font-light marker:text-[#666F8B66] text-[#0E0636] leading-[148%]">
                                                             {point}
                                                         </li>
                                                     ))}
@@ -152,7 +153,13 @@ const AboutTrust = () => {
                         );
                     })}
                     {allOpen && (
-                        <a target="_blank" href={currentPlatform.buttonLink} className="mt-8 px-6 py-3 rounded-full bg-transparent text-[#6B6AFD] border border-[#6B6AFD] font-semibold text-sm md:text-base cursor-pointer hover:opacity-90 transition-opacity">
+
+                        <a target="_blank"
+                            href={currentPlatform.buttonLink}
+                            onClick={() => setIsCtaActive(true)}
+                            className={`px-6 py-3 rounded-full border border-[#6B6AFD] font-semibold text-sm md:text-base cursor-pointer transition-colors hover:bg-[#6B6AFD] hover:text-white ${isCtaActive ? "bg-[#6B6AFD] text-white" : "bg-transparent text-[#6B6AFD]"
+                                }`}
+                        >
                             {currentPlatform.buttonLabel}
                         </a>
                     )}

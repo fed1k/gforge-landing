@@ -14,9 +14,9 @@ const AboutTeam = () => {
                     <p className="text-[#666F8B] text-xl">Founder and <br /> Admin’s</p>
                     <div className="grid gap-y-12 justify-start grid-cols-[294px] lg:grid-cols-[294px_294px_294px] lg:gap-8">
 
-                        <AboutProfileCard name="Alexander Nikolaevich" position="Founder & CEO of the GiftedForge" img="/ceo.jpg" />
-                        <AboutProfileCard name="Muhammad Huzaifa" position="UI/UX Designer of the GiftedForge" img="/muhammad.jpg" />
-                        <AboutProfileCard name="Firdavs Allamurotov" position="Full Stack Developer of the GiftedForge" img="/firdavs.jpg" />
+                        <AboutProfileCard link="#" name="Alexander Nikolaevich" position="Founder & CEO of the GiftedForge" img="/ceo.jpg" />
+                        <AboutProfileCard link="https://www.linkedin.com/in/muhammad-huzaifa-b7a0a5228/" name="Muhammad Huzaifa" position="UI/UX Designer of the GiftedForge" img="/muhammad.jpg" />
+                        <AboutProfileCard link="https://www.linkedin.com/in/firdavs-allamurotov/" name="Firdavs Allamurotov" position="Full Stack Developer of the GiftedForge" img="/firdavs.jpg" />
 
                     </div>
                 </div>

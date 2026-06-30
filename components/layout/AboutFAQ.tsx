@@ -4,39 +4,43 @@ import FaqCard from "../ui/FaqCard";
 
 const questions = [
     {
-        question: <>How to start working on <br /> the platform?</>,
-        answer: "Register, complete your profile, and add your skills and portfolio. After verification, you can apply for projects or create your own."
+        question: <>How are payments protected?</>,
+        answer: "Funds are held securely in escrow and are only released to the freelancer once the project has been completed and officially approved client."
     },
     {
-        question: <>How does the escrow <br /> system work?</>,
-        answer: "The client funds the project upfront. Payment is held securely in escrow and released to you once the work is approved."
+        question: <>Who can use GiftedForge?</>,
+        answer: "Anyone can use it—from freelancers and clients to creators and digital entrepreneurs looking to collaborate and grow."
     },
     {
-        question: <>How does AI matching <br /> work?</>,
-        answer: "The platform analyzes your skills, experience, and portfolio to automatically connect you with the most relevant projects and clients."
+        question: <>Is GiftedForge one product?</>,
+        answer: "GiftedForge is an ecosystem that currently includes a freelance marketplace and a Telegram-based digital ownership platform."
     },
     {
-        question: <>How to start working on <br /> the platform?</>,
-        answer: "Register, complete your profile, and add your skills and portfolio. After verification, you can apply for projects or create your own."
+        question: <>How are payments protected?</>,
+        answer: "Funds are held securely in escrow and are only released to the freelancer once the project has been completed and officially approved client."
     },
     {
-        question: <>How does the escrow <br /> system work?</>,
-        answer: "The client funds the project upfront. Payment is held securely in escrow and released to you once the work is approved."
+        question: <>Who can use GiftedForge?</>,
+        answer: "Anyone can use it—from freelancers and clients to creators and digital entrepreneurs looking to collaborate and grow."
     },
     {
-        question: <>How does AI matching <br /> work?</>,
-        answer: "The platform analyzes your skills, experience, and portfolio to automatically connect you with the most relevant projects and clients."
+        question: <>Is GiftedForge one product?</>,
+        answer: "GiftedForge is an ecosystem that currently includes a freelance marketplace and a Telegram-based digital ownership platform."
     },
 ]
 
 const questionsNext = [
     {
-        question: <>How fast do freelancers get paid?</>,
-        answer: <>Payments are released immediately after client approval and typically <br /> arrive based on your chosen payout method’s processing time.</>
+        question: <>Is the marketplace free to join?</>,
+        answer: "Yes. Users can create a free account and immediately start exploring opportunities, connecting with others, and finding projects that match their skills."
     },
     {
-        question: <>Is GiftedForge free to join?</>,
-        answer: "Yes — creating an account and browsing projects is free; fees only apply when you complete paid work."
+        question: <>Do I need experience with crypto?</>,
+        answer: <>No. The Telegram platform is designed to make digital ownership simple, accessible, and easy to understand, allowing users to engage with it without needing prior crypto experience.</>
+    },
+    {
+        question: <>Is the marketplace free to join?</>,
+        answer: "Yes. Users can create a free account and immediately start exploring opportunities, connecting with others, and finding projects that match their skills."
     },
 ]
 
@@ -92,7 +96,7 @@ const AboutFaq = () => {
 
                 <div className="   mb-17 lg:mb-25 p-6 pl-5 lg:pl-10.5 flex flex-col items-start pb-12">
                     <div className="flex flex-col items-start lg:gap-4">
-                        <div className="flex justify-center translate-x-1.5">
+                        <div className="flex justify-center">
                             {/* three images */}
                             <img className="w-12 h-12 lg:w-14.5 lg:h-14.5 object-cover rounded-full border border-white" src="/firdavs.jpg" alt="" />
                             <img className="w-12 lg:w-14.5 lg:h-14.5 -translate-x-2 h-12 object-cover rounded-full border border-white" src="/ceo.jpg" alt="" />
@@ -100,17 +104,29 @@ const AboutFaq = () => {
                         </div>
 
                         <div className="text-white lg:text-start text-start">
-                            <h3 className="pt-8 pb-2 lg:p-0  font-medium lg:text-xl">Still have questions?</h3>
-                            <p className="pt-4 text-sm font-light lg:text-base">Can’t find the answer you’re looking <br className="lg:hidden" />  for? Please chat to our friendly team.</p>
+                            <h3 className="pt-8 lg:p-0  font-medium lg:text-xl">Still have questions?</h3>
+                            <p className="pt-4 text-sm font-light lg:text-base">Can’t find the answer you’re looking for? <br className="lg:hidden" /> Please chat <br className="hidden lg:inline" /> to our friendly team.</p>
                         </div>
                     </div>
 
                     <button
                         onClick={(e) => e.currentTarget.focus()}
-                        className="mt-12 border-b border-white pb-1 flex items-center gap-1 text-white focus:outline-none  transition-all duration-300 cursor-pointer"
+                        className="group mt-12 hover:text-[#DAD8FF] hover:border-[#DAD8FF] focus:text-[#DAD8FF] focus:border-[#DAD8FF] border-b border-white pb-1 flex items-center gap-1 text-white focus:outline-none transition-all duration-300 cursor-pointer"
                     >
                         Get in Touch
-                        <img src="/arrow-right-stick.svg" className="w-4 h-4" alt="" />
+                        <span
+                            className="w-4 h-4 bg-white transition-colors duration-300 group-hover:bg-[#DAD8FF] group-focus:bg-[#DAD8FF]"
+                            style={{
+                                WebkitMaskImage: "url('/arrow-right-stick.svg')",
+                                maskImage: "url('/arrow-right-stick.svg')",
+                                WebkitMaskSize: "contain",
+                                maskSize: "contain",
+                                WebkitMaskRepeat: "no-repeat",
+                                maskRepeat: "no-repeat",
+                                WebkitMaskPosition: "center",
+                                maskPosition: "center",
+                            }}
+                        />
                     </button>
                 </div>
 
@@ -118,20 +134,22 @@ const AboutFaq = () => {
             {/*  */}
             <div className="bg-[#6B6AFD0D] rounded-3xl mx-3 mb-12 lg:mb-25 lg:mx-12 px-6 py-8 lg:py-12 flex flex-col items-center">
                 <h3 className="text-xl text-[#0E0636] font-medium">Ready to get started?</h3>
-                <p className="leading-7 text-[#666F8B] pt-6 lg:text-xl lg:leading-8 pb-8 w-[321px] lg:w-[856px] text-center">Join thousands of users already discovering new opportunities to work, create, and connect through GiftedForge. Whether you're looking to grow your skills, find meaningful projects, or build your digital presence, GiftedForge gives you the tools and space to turn ideas into real opportunities.</p>
-                
-                <button
-                    onClick={(e) => e.currentTarget.focus()}
-                    className="text-sm border border-[#6B6AFD] font-semibold lg:text-base text-[#6B6AFD] rounded-full h-[46px] w-[159px] lg:w-[173px] lg:h-[49px] hover:shadow-[0px_4px_24px_0px_#00000029] focus:shadow-[0px_4px_24px_0px_#00000029] focus:outline-none active:shadow-[0px_4px_24px_0px_#00000029] transition-all duration-300 cursor-pointer"
-                >
-                    Sign Up Now
-                </button>
-                <button
-                    onClick={(e) => e.currentTarget.focus()}
-                    className="text-sm mt-4 font-semibold lg:text-base text-white rounded-full h-[46px] w-[159px] lg:w-[173px] lg:h-[49px] bg-[#6B6AFD] hover:shadow-[0px_4px_24px_0px_#00000029] focus:shadow-[0px_4px_24px_0px_#00000029] focus:outline-none active:shadow-[0px_4px_24px_0px_#00000029] transition-all duration-300 cursor-pointer"
-                >
-                    Join Community
-                </button>
+                <p className="leading-7 text-[#666F8B] pt-6 lg:leading-8 pb-8 text-center">Join thousands of users already discovering new opportunities to work, create, and connect through GiftedForge. <br className="hidden lg:inline" /> Whether you're looking to grow your skills, find meaningful projects, or build your digital presence, GiftedForge gives <br className="hidden lg:inline" /> you the tools and space to turn ideas into real opportunities.</p>
+                <div className="flex flex-col lg:flex-row items-center lg:gap-4">
+
+                    <button
+                        onClick={(e) => e.currentTarget.focus()}
+                        className="text-sm border border-[#6B6AFD] font-semibold lg:text-base text-[#6B6AFD] rounded-full h-[46px] w-[159px] lg:w-[173px] lg:h-[49px] hover:shadow-[0px_4px_24px_0px_#00000029] focus:shadow-[0px_4px_24px_0px_#00000029] focus:outline-none active:shadow-[0px_4px_24px_0px_#00000029] transition-all duration-300 cursor-pointer"
+                    >
+                        Sign Up Now
+                    </button>
+                    <button
+                        onClick={(e) => e.currentTarget.focus()}
+                        className="text-sm mt-4 lg:mt-0 font-semibold lg:text-base text-white rounded-full h-[46px] w-[159px] lg:w-[173px] lg:h-[49px] bg-[#6B6AFD] hover:shadow-[0px_4px_24px_0px_#00000029] focus:shadow-[0px_4px_24px_0px_#00000029] focus:outline-none active:shadow-[0px_4px_24px_0px_#00000029] transition-all duration-300 cursor-pointer"
+                    >
+                        Join Community
+                    </button>
+                </div>
             </div>
         </div>
     )
